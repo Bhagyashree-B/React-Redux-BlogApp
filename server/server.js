@@ -1,10 +1,17 @@
 import express from 'express';
 import mongodb from 'mongodb';
 import bodyParser from 'body-parser';
+import path  from 'path';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 app.use(bodyParser.json());
 const dbUrl = 'mongodb://localhost/crudwithredux';
+
+// app.use(express.static('front-end/public'))
+app.use('/static', express.static(path.join(__dirname, 'front-end/public')))
+
+app.set('superSecret', 'myfirstsecret');
 
 function validate(data) {
   let errors = {};
@@ -15,6 +22,54 @@ function validate(data) {
 }
 
 mongodb.MongoClient.connect(dbUrl, function(err, db) {
+
+  app.post('/api/signup', (req, res) => {
+    const { errors, isValid } = validate(req.body);
+    if (isValid) {
+      const { name, email, password } = req.body;
+      db.collection('users').insert({ name, email, password }, (err, result) => {
+        if (err) {
+          res.status(500).json({ errors: { global: "Something went wrong" }});
+        } else {
+          res.json({ post: result.ops[0] });
+        }
+      });
+    } else {
+      res.status(400).json({ errors });
+    }
+  });
+
+  app.post('/api/authenticate', function(req, res) {
+
+    db.collection('users').findOne({ name: req.body.name }, (err, post) => {
+      if (err) throw err;
+
+      if (!user) {
+        res.json({ success: false, message: 'Authentication failed. User not found.' });
+      } else if (user) {
+
+        // check if password matches
+        if (user.password != req.body.password) {
+          res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+        } else {
+
+          // if user is found and password is right
+          // create a token
+          var token = jwt.sign(user, app.get('superSecret'), {
+            expiresInMinutes: 1440 // expires in 24 hours
+          });
+
+          // return the information including token as JSON
+          res.json({
+            success: true,
+            message: 'Enjoy your token!',
+            token: token
+          });
+        }   
+
+      }
+    })
+  });
 
   app.get('/api/posts', (req, res) => {
     db.collection('posts').find({}).toArray((err, posts) => {
