@@ -6,8 +6,8 @@ import thunk from 'redux-thunk';
 import rootReducer from './rootReducer';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.css'
 
 const store = createStore(
   rootReducer,
@@ -17,10 +17,9 @@ const store = createStore(
 );
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter>,
+  <Provider store={store}>
+    <App />
+  </Provider>
+  ,
   document.getElementById('root')
 );
