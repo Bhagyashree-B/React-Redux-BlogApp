@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 class Home extends Component {
   render() {
-    // return <div>home</div>
     return (
           this.props.isAuthenticated ?
           <Redirect to="/dashboard" /> :

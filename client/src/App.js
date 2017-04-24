@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Link, Redirect, Switch } from 'react-router-dom'
 import { BrowserRouter } from 'react-router-dom';
-
+import './App.css';
 import { logoutUser } from './actions';
-import PostsPage from './PostsPage';
-import PostFormPage from './PostFormPage';
+
 import Login from './Login';
 import Home from './Home';
-import './App.css';
 import Dashboard from './Dashboard'
 import TasksPage from './TasksPage';
 import TaskFormPage from './TaskFormPage';
@@ -90,10 +88,6 @@ class App extends Component {
                 <PrivateRoute exact isAuthenticated={this.props.isAuthenticated} path="/tasks" component={TasksPage} />
                 <PrivateRoute isAuthenticated={this.props.isAuthenticated} path="/tasks/new" component={TaskFormModalPopup} />
                 <PrivateRoute isAuthenticated={this.props.isAuthenticated} path="/task/:_id" component={TaskFormModalPopup} />
-
-                <PrivateRoute isAuthenticated={this.props.isAuthenticated} path="/posts" component={PostsPage} />
-                <PrivateRoute isAuthenticated={this.props.isAuthenticated} path="/posts/new" component={PostFormPage} />
-                <PrivateRoute isAuthenticated={this.props.isAuthenticated} path="/post/:_id" component={PostFormPage} />
                 <Route render={() => <h3>No Match</h3>} />
               </Switch>
             </div>

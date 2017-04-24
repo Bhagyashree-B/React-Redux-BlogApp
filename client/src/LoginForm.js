@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import { login, resetPassword } from '../helpers/auth'
 
 function setErrorMsg(error) {
   return {
@@ -23,11 +22,6 @@ export default class LoginForm extends Component {
     e.preventDefault()
     const { email, password } = this.state;
     this.props.login({ email, password })
-        // .catch((err) => err.response.json().then(({errors}) => this.setState({ errors, loading: false })));
-    // login(this.email.value, this.pw.value)
-    //   .catch((error) => {
-    //       this.setState(setErrorMsg('Invalid username/password.'))
-    //     });
   }
 
   resetPassword = () => {
@@ -36,14 +30,13 @@ export default class LoginForm extends Component {
     //   .catch((error) => this.setState(setErrorMsg(`Email address not found.`)))
   }
 
-    updateEmailState(e) {
+  updateEmailState(e) {
       this.setState({email: e.target.value});
    }
 
-    updatePasswordState(e) {
+  updatePasswordState(e) {
       this.setState({password: e.target.value});
    }
-
 
   render () {
     return (
