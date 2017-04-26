@@ -10,10 +10,11 @@ class taskForm extends React.Component {
     title: this.props.task ? this.props.task.title : '',
     // startDate : this.props.task ? this.props.task.startDate : '',
     // dueDate :this.props.task ? this.props.task.dueDate : '',
+    startDate: moment(),
+    dueDate : moment(),
     taskContent: this.props.task ? this.props.task.taskContent : '',
     errors: {},
-    loading: false,
-    startDate: moment()
+    loading: false
   }
 
   // componentWillReceiveProps = (nextProps) => {
@@ -37,11 +38,17 @@ class taskForm extends React.Component {
     }
   }
 
-  handleDateChange = (date) => {
+  handlestartDateChange = (date) => {
    this.setState({
      startDate: date
    });
  }
+
+ handledueDateChange = (date) => {
+  this.setState({
+    dueDate: date
+  });
+}
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -50,15 +57,15 @@ class taskForm extends React.Component {
     let errors = {};
     if (this.state.title === '') errors.title = "Can't be empty";
     if (this.state.taskContent === '') errors.taskContent = "Can't be empty";
-    // if (this.state.startDate === '') errors.startDate = "Can't be empty";
-    // if (this.state.dueDate === '') errors.dueDate = "Can't be empty";
+    if (this.state.startDate == null) errors.startDate = "Can't be empty";
+    if (this.state.dueDate == null) errors.dueDate = "Can't be empty";
     this.setState({ errors });
     const isValid = Object.keys(errors).length === 0
 
     if (isValid) {
-      const { _id, title, taskContent } = this.state;
+      const { _id, title, startDate , dueDate , taskContent } = this.state;
       this.setState({ loading: true });
-      this.props.savetask({ _id, title, taskContent  })
+      this.props.savetask({ _id, title, startDate , dueDate , taskContent  })
         .catch((err) => err.response.json().then(({errors}) => this.setState({ errors, loading: false })));
     }
   }
@@ -80,15 +87,23 @@ class taskForm extends React.Component {
           <span>{this.state.errors.title}</span>
         </div>
 
-        <div className={classnames('field', { error: !!this.state.errors.title})}>
-          <label htmlFor="title">Start Date</label>
-                  <DatePicker selected={this.state.startDate} onChange={this.handleDateChange}  />;
-          <span>{this.state.errors.title}</span>
+        <div className="col-md-6">
+          <div className={classnames('field', { error: !!this.state.errors.startDate})}>
+            <label htmlFor="startDate">Start Date</label>
+                    <DatePicker selected={this.state.startDate} onChange={this.handlestartDateChange}  />;
+            <span>{this.state.errors.startDate}</span>
+          </div>
+       </div>
+       <div className="col-md-6">
+          <div className={classnames('field', { error: !!this.state.errors.dueDate})}>
+            <label htmlFor="dueDate">Due Date</label>
+                    <DatePicker selected={this.state.dueDate} onChange={this.handledueDateChange}  />;
+            <span>{this.state.errors.dueDate}</span>
+          </div>
         </div>
 
-
         <div className={classnames('field', { error: !!this.state.errors.taskContent})}>
-          <label htmlFor="taskContent">Content</label>
+          <label htmlFor="taskContent">Description</label>
           <input
             name="taskContent"
             value={this.state.taskContent}
@@ -97,8 +112,7 @@ class taskForm extends React.Component {
           />
           <span>{this.state.errors.taskContent}</span>
         </div>
-
-
+        
         <div className="field">
           <button className="ui primary button">Save</button>
         </div>
