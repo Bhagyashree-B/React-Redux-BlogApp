@@ -3,7 +3,7 @@ export const ADD_TASK = 'ADD_TASK';
 export const TASK_FETCHED = 'TASK_FETCHED';
 export const TASK_UPDATED = 'TASK_UPDATED';
 export const TASK_DELETED = 'TASK_DELETED';
-
+export const LOGGEDIN = 'LOGGEDIN';
 export const LOGIN = 'LOGIN';
 
 
@@ -17,7 +17,7 @@ function handleResponse(response) {
   }
 }
 
-export const LOGGEDIN = 'LOGGEDIN';
+
 export function loggedIn(user, token) {
    user.token = token
    user.isAuthenticated = true
@@ -137,7 +137,7 @@ export function fetchtasks() {
       }
     }).then(res => res.json())
       .then(data => dispatch(settasks(data.tasks)));
-    
+
   };
 }
 

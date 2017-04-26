@@ -82,7 +82,7 @@ class App extends Component {
           <div className="container">
             <div className="row">
               <Switch>
-                <Route path='/' exact component={Home} />              
+                <Route path='/' exact component={Home} />
                 <PublicRoute isAuthenticated={this.props.isAuthenticated} path='/login' component={Login} />
                 <PrivateRoute isAuthenticated={this.props.isAuthenticated} path="/dashboard" component={Dashboard} />
                 <PrivateRoute exact isAuthenticated={this.props.isAuthenticated} path="/tasks" component={TasksPage} />
