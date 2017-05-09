@@ -13,7 +13,7 @@ class tasksPage extends React.Component {
     return (
       <div>
       <div className="pull-right">  < TaskFormModalPopup /> </div>
-        <h1>tasks List</h1>
+        <h1>Tasks List</h1>
         <TasksList tasks={this.props.tasks} deletetask={this.props.deletetask} />
       </div>
     );

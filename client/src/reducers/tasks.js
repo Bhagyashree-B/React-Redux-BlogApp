@@ -9,19 +9,19 @@ export default function tasks(state = [], action = {}) {
       ];
 
     case TASK_DELETED:
-      return state.filter(item => item._id !== action.taskId);
+      return state.filter(item => item.id !== action.taskId);
 
     case TASK_UPDATED:
       return state.map(item => {
-        if (item._id === action.task._id) return action.task;
+        if (item.id === action.task.id) return action.task;
         return item;
       });
 
     case TASK_FETCHED:
-      const index = state.findIndex(item => item._id === action.task._id);
+      const index = state.findIndex(item => item.id === action.task.id);
       if (index > -1) {
         return state.map(item => {
-          if (item._id === action.task._id) return action.task;
+          if (item.id === action.task.id) return action.task;
           return item;
         });
       } else {
@@ -33,6 +33,7 @@ export default function tasks(state = [], action = {}) {
 
     case SET_TASKS:
       return action.tasks;
+
     default: return state;
   }
 }

@@ -12,14 +12,14 @@ class TaskFormPage extends React.Component {
 
   componentDidMount = () => {
     const { match } = this.props;
-    if (match.params._id) {
-      this.props.fetchtask(match.params._id);
+    if (match.params.id) {
+      this.props.fetchtask(match.params.id);
     }
   }
 
-  savetask = ({_id, title, taskContent }) => {
-    if (_id) {
-      return this.props.updatetask({ _id, title, taskContent }).then(
+  savetask = ({id, title, taskContent }) => {
+    if (id) {
+      return this.props.updatetask({ id, title, taskContent }).then(
         () => { this.setState({ redirect: true })},
       );
     } else {
@@ -47,9 +47,9 @@ class TaskFormPage extends React.Component {
 
 function mapStateToProps(state, props) {
   const { match } = props;
-  if (match.params._id) {
+  if (match.params.id) {
     return {
-      task: state.tasks.find(item => item._id === match.params._id)
+      task: state.tasks.find(item => item.id === match.params.id)
     }
   }
 

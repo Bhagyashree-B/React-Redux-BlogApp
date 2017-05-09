@@ -12,7 +12,7 @@ export default class LoginForm extends Component {
       this.state = {
         email: "",
         password :"",
-       loginMessage: null
+        loginMessage: null
       }
       this.updateEmailState = this.updateEmailState.bind(this);
       this.updatePasswordState = this.updatePasswordState.bind(this);

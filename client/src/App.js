@@ -87,7 +87,7 @@ class App extends Component {
                 <PrivateRoute isAuthenticated={this.props.isAuthenticated} path="/dashboard" component={Dashboard} />
                 <PrivateRoute exact isAuthenticated={this.props.isAuthenticated} path="/tasks" component={TasksPage} />
                 <PrivateRoute isAuthenticated={this.props.isAuthenticated} path="/tasks/new" component={TaskFormModalPopup} />
-                <PrivateRoute isAuthenticated={this.props.isAuthenticated} path="/task/:_id" component={TaskFormModalPopup} />
+                <PrivateRoute isAuthenticated={this.props.isAuthenticated} path="/task/:id" component={TaskFormModalPopup} />
                 <Route render={() => <h3>No Match</h3>} />
               </Switch>
             </div>

@@ -1,3 +1,5 @@
+import glQuery from './service/HttpGraphQl'
+
 export const SET_TASKS = 'SET_TASKS';
 export const ADD_TASK = 'ADD_TASK';
 export const TASK_FETCHED = 'TASK_FETCHED';
@@ -89,18 +91,17 @@ export function taskDeleted(taskId) {
 }
 
 export function savetask(data) {
+  let payload = 'mutation { addTask( title: "' + data.title 
+                  + '", category: "' + data.category 
+                  +'", startDate: "' + data.startDate.toISOString() 
+                  +'", dueDate: "' + data.dueDate.toISOString() 
+                  +'", taskContent: "' + data.taskContent 
+                +'", ) { id, category, title, startDate, dueDate, taskContent } }'
+
   return (dispatch, getState) => {
     const { user } = getState();
-    return fetch('/api/tasks', {
-      method: 'post',
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": user.token
-      }
-    }).then(handleResponse)
-    .then(data => dispatch(addtask(data.task)));
-  };
+    return glQuery(payload, user).then(data => dispatch(addtask(data.addTask)) );
+  }
 }
 
 export function updatetask(data) {
@@ -117,28 +118,20 @@ export function updatetask(data) {
 }
 
 export function deletetask(id) {
-  return dispatch => {
-    return fetch(`/api/tasks/${id}`, {
-      method: 'delete',
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(handleResponse)
-    .then(data => dispatch(taskDeleted(id)));
+  let payload = 'mutation { deleteTask( id: "'+ id +'" ) { id } }'
+
+  return (dispatch, getState) => {
+    const { user } = getState();
+    return glQuery(payload, user).then(data => dispatch(taskDeleted(id)) );
   }
 }
 
 export function fetchtasks() {
+  let payload = "{ tasks {id, title, category, startDate , dueDate , taskContent}}"
   return (dispatch, getState) => {
     const { user } = getState();
-    fetch('/api/tasks', {
-      headers: {
-        "x-access-token": user.token
-      }
-    }).then(res => res.json())
-      .then(data => dispatch(settasks(data.tasks)));
-    
-  };
+    glQuery(payload, user).then(data => dispatch(settasks(data.tasks)));
+  }
 }
 
 export function fetchtask(id) {
@@ -146,5 +139,23 @@ export function fetchtask(id) {
     fetch(`/api/tasks/${id}`)
       .then(res => res.json())
       .then(data => dispatch(taskFetched(data.task)));
+  }
+}
+
+
+export const SET_CHART_DATA = 'SET_CHART_DATA';
+
+export function setChartData(chartData) {
+  return {
+    type: SET_CHART_DATA,
+    chartData
+  }
+}
+
+export function fetchChartData() {
+  let payload = "{ chartByCategory { total, data {category, count} } }"
+  return (dispatch, getState) => {
+    const { user } = getState();
+    glQuery(payload, user).then(data => dispatch(setChartData(data.chartByCategory)));
   }
 }

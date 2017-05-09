@@ -9,7 +9,7 @@ export default function TasksList({ tasks, deletetask }) {
 
   const TasksList = (
     <div className="panel">
-      { tasks.map(task => <TaskCard task={task} key={task._id} deletetask={deletetask} />) }
+      { tasks.map(task => <TaskCard task={task} key={task.id} deletetask={deletetask} />) }
     </div>
   );
 
