@@ -9,7 +9,7 @@ import Login from './Login';
 import Home from './Home';
 import Dashboard from './Dashboard'
 import TasksPage from './TasksPage';
-import TaskFormPage from './TaskFormPage';
+// import TaskFormPage from './TaskFormPage';
 import TaskFormModalPopup from './TaskFormModalPopup';
 
 function PrivateRoute ({component: Component, isAuthenticated, ...rest}) {

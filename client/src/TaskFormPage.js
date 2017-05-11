@@ -5,7 +5,6 @@ import { savetask, fetchtask, updatetask } from './actions';
 import TaskForm from './TaskForm';
 
 class TaskFormPage extends React.Component {
-
   state = {
     redirect: false
   }
@@ -52,7 +51,6 @@ function mapStateToProps(state, props) {
       task: state.tasks.find(item => item._id === match.params._id)
     }
   }
-
   return { task: null };
 }
 

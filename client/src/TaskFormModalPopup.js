@@ -1,25 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { savetask, fetchtask, updatetask } from './actions';
+// import { Redirect } from 'react-router-dom';
+import { savetask} from './actions';
 import TaskForm from './TaskForm';
-import {Modal , Button} from 'react-bootstrap';
+// import {Modal , Button} from 'react-bootstrap';
 
 class TaskFormModalPopup extends React.Component {
-
   state = {
     redirect: false,
     showModal: false
   }
 
   close = () => {
+    console.log("        Click to close modal popup");
     this.setState({ showModal: false });
   }
 
   open = () => {
+    console.log("        Click to open modal popup");
     this.setState({ showModal: true });
   }
-  //
+  
   // componentDidMount = () => {
   //   const { match } = this.props;
   //   if (match.params._id) {
@@ -33,9 +34,11 @@ class TaskFormModalPopup extends React.Component {
     //     () => { this.setState({ redirect: true })},
     //   );
     // } else {
-      return this.props.savetask({ title, taskContent }).then(
-        () => { this.close() },
-      );
+      // console.log('In CONTAINERS save task')
+     this.props.savetask({ title, taskContent }).then( data => {
+          console.log(`        Perform action on save task ${JSON.stringify(data.type)}`)
+          this.close()
+      });
     // }
   }
 
@@ -43,21 +46,24 @@ class TaskFormModalPopup extends React.Component {
     return (
       <div>
         {
-
           <div>
-            <Button bsStyle="primary" bsSize="large" onClick={this.open}> + </Button>
-            <Modal show={this.state.showModal} onHide={this.close}>
-              <Modal.Header closeButton>
-                <Modal.Title>Add Task</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-              <TaskForm
-                task={this.props.task}
-                savetask={this.savetask}
-              />
-              </Modal.Body>
-
-            </Modal>
+              <button id="modalBtn" type="button" className="btn btn-info btn-lg modalBtn" onClick={this.open} data-toggle="modal" data-target="#myModal"> + </button>
+                <div className="modal fade" id="myModal" role="dialog">
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <button type="button" className="close" data-dismiss="modal">&times;</button>
+                        <h4 className="modal-title">Modal Header</h4>
+                      </div>
+                      <div className="modal-body">
+                      <TaskForm task={this.props.task} savetask={this.savetask}/>
+                      </div>
+                      <div className="modal-footer">
+                        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
          </div>
         }
       </div>

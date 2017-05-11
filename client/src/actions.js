@@ -5,7 +5,8 @@ export const TASK_UPDATED = 'TASK_UPDATED';
 export const TASK_DELETED = 'TASK_DELETED';
 export const LOGGEDIN = 'LOGGEDIN';
 export const LOGIN = 'LOGIN';
-
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
 
 function handleResponse(response) {
   if (response.ok) {
@@ -17,7 +18,6 @@ function handleResponse(response) {
   }
 }
 
-
 export function loggedIn(user, token) {
    user.token = token
    user.isAuthenticated = true
@@ -28,16 +28,31 @@ export function loggedIn(user, token) {
 }
 
 export function authenticate(data) {
-  return dispatch => {
-    return fetch('/api/login', {
+   return dispatch => {
+  //  console.log("        In authenticate action")
+    return fetch("http://localhost:8080/api/login", {
       method: 'post',
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json"
       }
     }).then(handleResponse)
-    .then(data => dispatch(loggedIn(data.user, data.token)));
+    .then(data => dispatch(loggedIn(data.user, data.token)) );
   }
+
+  // return dispatch => {
+  //   return fetch("http://localhost:8080/api/login", {
+  //     method: 'post',
+  //     body: JSON.stringify(data),
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   }).then(handleResponse)
+  //   .then(data => {
+  //     console.log("in authenticate");
+  //   dispatch(loggedIn(data.user, data.token))
+  // });
+  // }
 }
 
 export const LOGOUT = 'LOGOUT';
@@ -89,14 +104,15 @@ export function taskDeleted(taskId) {
 }
 
 export function savetask(data) {
+    // console.log("        Task to store into database => " , data )
   return (dispatch, getState) => {
-    const { user } = getState();
-    return fetch('/api/tasks', {
+    // const { user } = getState(); used for user.token in x-access-token
+      return fetch('http://localhost:8080/api/tasks', {
       method: 'post',
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": user.token
+        "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZlZjBhNWVkYTM4YmYzOTNmMWNhOTAiLCJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiMTIzNDUiLCJpYXQiOjE0OTQ0MDkyNTksImV4cCI6MTQ5NDU1MzI1OX0.k-RK5LunRMW2uaTJnT1IW6ZBj4OiwfTqaoQdHUW6yS4"
       }
     }).then(handleResponse)
     .then(data => dispatch(addtask(data.task)));
@@ -105,7 +121,7 @@ export function savetask(data) {
 
 export function updatetask(data) {
   return dispatch => {
-    return fetch(`/api/tasks/${data._id}`, {
+    return fetch(`http://localhost:8080/api/tasks/${data._id}`, {
       method: 'put',
       body: JSON.stringify(data),
       headers: {
@@ -118,10 +134,11 @@ export function updatetask(data) {
 
 export function deletetask(id) {
   return dispatch => {
-    return fetch(`/api/tasks/${id}`, {
+    return fetch(`http://localhost:8080/api/tasks/${id}`, {
       method: 'delete',
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZlZjBhNWVkYTM4YmYzOTNmMWNhOTAiLCJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiMTIzNDUiLCJpYXQiOjE0OTQ0MDkyNTksImV4cCI6MTQ5NDU1MzI1OX0.k-RK5LunRMW2uaTJnT1IW6ZBj4OiwfTqaoQdHUW6yS4"
       }
     }).then(handleResponse)
     .then(data => dispatch(taskDeleted(id)));
@@ -130,20 +147,19 @@ export function deletetask(id) {
 
 export function fetchtasks() {
   return (dispatch, getState) => {
-    const { user } = getState();
-    fetch('/api/tasks', {
+    // const { user } = getState();
+  return  fetch('http://localhost:8080/api/tasks', {
       headers: {
-        "x-access-token": user.token
+        "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZlZjBhNWVkYTM4YmYzOTNmMWNhOTAiLCJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiMTIzNDUiLCJpYXQiOjE0OTQ0MDkyNTksImV4cCI6MTQ5NDU1MzI1OX0.k-RK5LunRMW2uaTJnT1IW6ZBj4OiwfTqaoQdHUW6yS4"
       }
     }).then(res => res.json())
       .then(data => dispatch(settasks(data.tasks)));
-
   };
 }
 
 export function fetchtask(id) {
   return dispatch => {
-    fetch(`/api/tasks/${id}`)
+    fetch(`http://localhost:8080/api/tasks/${id}`)
       .then(res => res.json())
       .then(data => dispatch(taskFetched(data.task)));
   }

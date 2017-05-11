@@ -3,9 +3,11 @@ import mongodb from 'mongodb';
 import bodyParser from 'body-parser';
 import path  from 'path';
 import jwt from 'jsonwebtoken';
-
+var cors = require('cors')
 const app = express();
+
 app.use(bodyParser.json());
+app.use(cors())
 const dbUrl = 'mongodb://localhost/crudwithredux';
 
 // app.use(express.static('front-end/public'))
@@ -43,7 +45,7 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
 
   app.post('/api/login', function(req, res) {
     console.log("auth api called")
-    console.log(req)
+    console.log(req.body)
     db.collection('users').findOne({ email: req.body.email }, (err, user) => {
       if (err) throw err;
       console.log(user)
@@ -59,7 +61,7 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
           // if user is found and password is right
           // create a token
           var token = jwt.sign(user, app.get('superSecret'), {
-            expiresIn: 1440 // expires in 24 hours
+            expiresIn: 144000 // expires in 24 hours
           });
 
           delete user.password
@@ -78,13 +80,13 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
 
   // route middleware to verify a token
   app.use(function(req, res, next) {
-  
+
     // check header or url parameters or post parameters for token
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
-  
+
     // decode token
     if (token) {
-  
+
       // verifies secret and checks exp
       jwt.verify(token, app.get('superSecret'), function(err, decoded) {
         if (err) {
@@ -95,22 +97,28 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
           next();
         }
       });
-  
+
     } else {
-  
+
       // if there is no token
       // return an error
       return res.status(403).send({
           success: false,
           message: 'No token provided.'
       });
-  
+
     }
   });
 
   app.get('/api/tasks', (req, res) => {
     db.collection('tasks').find({}).toArray((err, tasks) => {
-      res.json({ tasks });
+        if (err) {
+          console.log("Something wrong while fetching tasks");
+        }else{
+            console.log(" \n Fetched all the tasks...\n");
+            // console.log(tasks)
+            res.json({ tasks });
+        }
     });
   });
 
@@ -123,7 +131,7 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
           console.log("500");
           res.status(500).json({ errors: { global: "Something went wrong" }});
         } else {
-          console.log("insreted");
+          console.log("inserted");
           res.json({ task: result.ops[0] });
         }
       });

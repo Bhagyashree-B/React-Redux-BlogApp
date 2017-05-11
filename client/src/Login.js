@@ -4,15 +4,17 @@ import { Redirect } from 'react-router-dom';
 import { authenticate } from './actions';
 import LoginForm from './LoginForm';
 
-class Login extends Component {
-  state = {
-    redirect: false
+
+ class Login extends Component {
+  state  = {
+    redirect: false,
+    response:''
   }
 
   login = ({ email, password }) => {
-    this.props.authenticate({ email, password }).then(
-        () => {  },
-      );
+      this.props.authenticate({ email, password }).then(data => {
+          //  console.log(`parsed data ${JSON.stringify(data.type)}`);
+    })
   }
 
   render() {
@@ -27,7 +29,6 @@ class Login extends Component {
     );
   }
 }
-
 function mapStateToProps(state, props) {
   return {};
 }
