@@ -35,7 +35,7 @@ export default function tasks(state = [], action = {}) {
       return action.tasks;
 
     case LOGOUT:
-      return {};
+      return [];
 
     default: return state;
   }
