@@ -58,6 +58,9 @@ class App extends Component {
               </div>
               <ul className="nav navbar-nav pull-right">
                 <li>
+                  <a className="text-capitalize">Hi, {this.props.currentUser.name}</a>
+                </li>
+                <li>
                   <ActiveLink activeOnlyWhenExact to="/dashboard" label="Dashboard" />
                 </li>
                 <li>
@@ -100,7 +103,7 @@ class App extends Component {
 }
 
 function mapStateToProps(state, props) {
-  return { isAuthenticated : state.user.token ? true : false };
+  return { isAuthenticated : state.user.token ? true : false, currentUser: state.user };
 }
 
 export default connect(mapStateToProps, { logoutUser })(App);

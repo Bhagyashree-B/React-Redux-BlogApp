@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
+import user from '../user/userType'
+var ObjectId = require('mongodb').ObjectID;
 
 var taskSchema = new mongoose.Schema({
   id: { type:String, required:true, unique:true, index:true, default:mongoose.Types.ObjectId },
+  userId: { type:String, required:true, default:mongoose.Types.ObjectId },
   title: String,
   category: String,
   startDate: String,
@@ -13,9 +16,9 @@ let task = mongoose.model('task', taskSchema);
 
 module.exports = task;
 
-module.exports.getListOfTasks = () => {
+module.exports.getListOfTasks = (root, {userId}) => {
   return new Promise((resolve, reject) => {
-    task.find({}).exec((err, res) => {
+    task.find({ "userId" : userId}).exec((err, res) => {
       err ? reject(err) : resolve(res);
     });
   });
@@ -49,22 +52,51 @@ module.exports.getTaskByPosition = (root, {id}) => {
   });
 };
 
-module.exports.getChartDataByCategory = () => {
-  return new Promise((resolve, reject) => {
-      task.aggregate( 
+module.exports.getChartDataByCategory = (root, {userId}) => {
+  var dataBycategory = new Promise((resolve, reject) => {
+      task.aggregate(
+        {$match : {userId : userId}}, 
         {$group:{_id: '$category', count:{$sum:1}}},
         {$project:{tmp:{category:'$_id', count:'$count'}}}, 
         {$group:{_id:null, total:{$sum:'$tmp.count'}, data:{$addToSet:'$tmp'}}}
-      )
-    .exec((err, res) => {
-      console.log(res)
+      ).exec((err, res) => {
       err ? reject(err) : resolve(res[0]);
     });
   });
+
+  var p2 = new Promise((resolve, reject) => {
+      task.aggregate( 
+        {$group:{ _id: '$userId', count:{$sum:1}}},
+        {$project:{ userId:'$_id', count:'$count'}}
+      ).exec((err, res) => {
+        if(err) {
+          reject(err)
+        } else {
+          let x_esponse = []
+          res.map( item => {
+            x_esponse.push(user.findOne({ _id: ObjectId(item.userId) }, (err, u) => {
+                if(u){
+                  item.userName = u.name
+                }
+              })
+            )
+          })
+          Promise.all(x_esponse).then(()=>
+            resolve(res)
+          )
+        }
+    });
+  }); 
+
+  return Promise.all([dataBycategory, p2]).then(values => { 
+    let res = { dataBycategory : values[0], allData : values[1]}
+    console.log(res); // [dataBycategory, p2]
+    return res;
+  });
 };
 
-module.exports.addTask = (root, {title, category, startDate , dueDate , taskContent }) => {
-  var newTask = new task({title:title, category:category, startDate:startDate, dueDate:dueDate, taskContent:taskContent});
+module.exports.addTask = (root, {userId, title, category, startDate , dueDate , taskContent }) => {
+  var newTask = new task({userId: ObjectId(userId), title:title, category:category, startDate:startDate, dueDate:dueDate, taskContent:taskContent});
 
   return new Promise((resolve, reject) => {
     newTask.save((err, res) => {

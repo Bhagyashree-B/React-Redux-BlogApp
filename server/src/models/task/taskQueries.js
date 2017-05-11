@@ -15,6 +15,11 @@ import task from './taskSchema'
 export default {
   tasks: {
     type: new GraphQLList(taskType),
+    args: {
+      userId: {
+        type: GraphQLString
+      }
+    },
     resolve: task.getListOfTasks
   },
   task: {
@@ -46,6 +51,11 @@ export default {
   },
   chartByCategory: {
     type: taskChartType,
+    args: {
+      userId: {
+        type: GraphQLString
+      }
+    },
     resolve: task.getChartDataByCategory
   }
 };

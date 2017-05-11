@@ -13,11 +13,11 @@ export default new GraphQLObjectType({
   name: 'Task',
   description: 'Task object',
   fields: () => ({
-    _id: {
+    id: {
       type: new GraphQLNonNull(GraphQLID)
     },
-    id: {
-      type: GraphQLString
+    userId: {
+      type: new GraphQLNonNull(GraphQLString)
     },
     title: {
       type: new GraphQLNonNull(GraphQLString)

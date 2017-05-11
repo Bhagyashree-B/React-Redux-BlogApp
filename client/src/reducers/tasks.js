@@ -1,4 +1,4 @@
-import { SET_TASKS, ADD_TASK, TASK_FETCHED, TASK_UPDATED, TASK_DELETED } from '../actions';
+import { SET_TASKS, ADD_TASK, TASK_FETCHED, TASK_UPDATED, TASK_DELETED, LOGOUT } from '../actions';
 
 export default function tasks(state = [], action = {}) {
   switch(action.type) {
@@ -33,6 +33,9 @@ export default function tasks(state = [], action = {}) {
 
     case SET_TASKS:
       return action.tasks;
+
+    case LOGOUT:
+      return {};
 
     default: return state;
   }

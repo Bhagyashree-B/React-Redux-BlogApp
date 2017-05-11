@@ -15,6 +15,10 @@ export default {
   addTask:{
     type:taskType,
     args: {
+      userId:{
+        name:'userId',
+        type:new GraphQLNonNull(GraphQLString)
+      },
       title:{
         name:'title',
         type:new GraphQLNonNull(GraphQLString)

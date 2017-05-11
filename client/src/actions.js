@@ -91,15 +91,16 @@ export function taskDeleted(taskId) {
 }
 
 export function savetask(data) {
-  let payload = 'mutation { addTask( title: "' + data.title 
+  return (dispatch, getState) => {
+    const { user } = getState();
+    const payload = 'mutation { addTask( title: "' + data.title 
                   + '", category: "' + data.category 
                   +'", startDate: "' + data.startDate.toISOString() 
                   +'", dueDate: "' + data.dueDate.toISOString() 
                   +'", taskContent: "' + data.taskContent 
-                +'", ) { id, category, title, startDate, dueDate, taskContent } }'
+                  +'", userId: "' + user._id 
+                  +'", ) { id, category, title, startDate, dueDate, taskContent } }'
 
-  return (dispatch, getState) => {
-    const { user } = getState();
     return glQuery(payload, user).then(data => dispatch(addtask(data.addTask)) );
   }
 }
@@ -127,9 +128,9 @@ export function deletetask(id) {
 }
 
 export function fetchtasks() {
-  let payload = "{ tasks {id, title, category, startDate , dueDate , taskContent}}"
   return (dispatch, getState) => {
     const { user } = getState();
+    let payload = '{ tasks( userId : "'+ user._id +'") { id, userId, title, category, startDate , dueDate , taskContent}}'
     glQuery(payload, user).then(data => dispatch(settasks(data.tasks)));
   }
 }
@@ -153,9 +154,9 @@ export function setChartData(chartData) {
 }
 
 export function fetchChartData() {
-  let payload = "{ chartByCategory { total, data {category, count} } }"
   return (dispatch, getState) => {
     const { user } = getState();
+    let payload = '{ chartByCategory( userId : "'+ user._id +'") { dataBycategory { total, data {category, count} } , allData { count, userName} } }'
     glQuery(payload, user).then(data => dispatch(setChartData(data.chartByCategory)));
   }
 }
