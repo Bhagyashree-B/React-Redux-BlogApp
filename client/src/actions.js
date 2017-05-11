@@ -1,12 +1,15 @@
+import glQuery from './service/HttpGraphQl'
+
 export const SET_TASKS = 'SET_TASKS';
 export const ADD_TASK = 'ADD_TASK';
 export const TASK_FETCHED = 'TASK_FETCHED';
 export const TASK_UPDATED = 'TASK_UPDATED';
 export const TASK_DELETED = 'TASK_DELETED';
-export const LOGGEDIN = 'LOGGEDIN';
+
 export const LOGIN = 'LOGIN';
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
+
 
 function handleResponse(response) {
   if (response.ok) {
@@ -18,6 +21,7 @@ function handleResponse(response) {
   }
 }
 
+export const LOGGEDIN = 'LOGGEDIN';
 export function loggedIn(user, token) {
    user.token = token
    user.isAuthenticated = true
@@ -28,31 +32,16 @@ export function loggedIn(user, token) {
 }
 
 export function authenticate(data) {
-   return dispatch => {
-  //  console.log("        In authenticate action")
-    return fetch("http://localhost:8080/api/login", {
+  return dispatch => {
+    return fetch('http://localhost:8080/api/login', {
       method: 'post',
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json"
       }
     }).then(handleResponse)
-    .then(data => dispatch(loggedIn(data.user, data.token)) );
+    .then(data => dispatch(loggedIn(data.user, data.token)));
   }
-
-  // return dispatch => {
-  //   return fetch("http://localhost:8080/api/login", {
-  //     method: 'post',
-  //     body: JSON.stringify(data),
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   }).then(handleResponse)
-  //   .then(data => {
-  //     console.log("in authenticate");
-  //   dispatch(loggedIn(data.user, data.token))
-  // });
-  // }
 }
 
 export const LOGOUT = 'LOGOUT';
@@ -104,24 +93,23 @@ export function taskDeleted(taskId) {
 }
 
 export function savetask(data) {
-    // console.log("        Task to store into database => " , data )
   return (dispatch, getState) => {
-    // const { user } = getState(); used for user.token in x-access-token
-      return fetch('http://localhost:8080/api/tasks', {
-      method: 'post',
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZlZjBhNWVkYTM4YmYzOTNmMWNhOTAiLCJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiMTIzNDUiLCJpYXQiOjE0OTQ0MDkyNTksImV4cCI6MTQ5NDU1MzI1OX0.k-RK5LunRMW2uaTJnT1IW6ZBj4OiwfTqaoQdHUW6yS4"
-      }
-    }).then(handleResponse)
-    .then(data => dispatch(addtask(data.task)));
-  };
+    const { user } = getState();
+    const payload = 'mutation { addTask( title: "' + data.title 
+                  + '", category: "' + data.category 
+                  +'", startDate: "' + data.startDate.toISOString() 
+                  +'", dueDate: "' + data.dueDate.toISOString() 
+                  +'", taskContent: "' + data.taskContent 
+                  +'", userId: "' + user._id 
+                  +'", ) { id, category, title, startDate, dueDate, taskContent } }'
+
+    return glQuery(payload, user).then(data => dispatch(addtask(data.addTask)) );
+  }
 }
 
 export function updatetask(data) {
   return dispatch => {
-    return fetch(`http://localhost:8080/api/tasks/${data._id}`, {
+    return fetch(`/api/tasks/${data._id}`, {
       method: 'put',
       body: JSON.stringify(data),
       headers: {
@@ -133,34 +121,44 @@ export function updatetask(data) {
 }
 
 export function deletetask(id) {
-  return dispatch => {
-    return fetch(`http://localhost:8080/api/tasks/${id}`, {
-      method: 'delete',
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZlZjBhNWVkYTM4YmYzOTNmMWNhOTAiLCJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiMTIzNDUiLCJpYXQiOjE0OTQ0MDkyNTksImV4cCI6MTQ5NDU1MzI1OX0.k-RK5LunRMW2uaTJnT1IW6ZBj4OiwfTqaoQdHUW6yS4"
-      }
-    }).then(handleResponse)
-    .then(data => dispatch(taskDeleted(id)));
+  let payload = 'mutation { deleteTask( id: "'+ id +'" ) { id } }'
+
+  return (dispatch, getState) => {
+    const { user } = getState();
+    return glQuery(payload, user).then(data => dispatch(taskDeleted(id)) );
   }
 }
 
 export function fetchtasks() {
   return (dispatch, getState) => {
-    // const { user } = getState();
-  return  fetch('http://localhost:8080/api/tasks', {
-      headers: {
-        "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGZlZjBhNWVkYTM4YmYzOTNmMWNhOTAiLCJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdCIsInBhc3N3b3JkIjoiMTIzNDUiLCJpYXQiOjE0OTQ0MDkyNTksImV4cCI6MTQ5NDU1MzI1OX0.k-RK5LunRMW2uaTJnT1IW6ZBj4OiwfTqaoQdHUW6yS4"
-      }
-    }).then(res => res.json())
-      .then(data => dispatch(settasks(data.tasks)));
-  };
+    const { user } = getState();
+    let payload = '{ tasks( userId : "'+ user._id +'") { id, userId, title, category, startDate , dueDate , taskContent}}'
+    return glQuery(payload, user).then(data => dispatch(settasks(data.tasks)));
+  }
 }
 
 export function fetchtask(id) {
   return dispatch => {
-    fetch(`http://localhost:8080/api/tasks/${id}`)
+    fetch(`/api/tasks/${id}`)
       .then(res => res.json())
       .then(data => dispatch(taskFetched(data.task)));
+  }
+}
+
+
+export const SET_CHART_DATA = 'SET_CHART_DATA';
+
+export function setChartData(chartData) {
+  return {
+    type: SET_CHART_DATA,
+    chartData
+  }
+}
+
+export function fetchChartData() {
+  return (dispatch, getState) => {
+    const { user } = getState();
+    let payload = '{ chartByCategory( userId : "'+ user._id +'") { dataBycategory { total, data {category, count} } , allData { count, userName} } }'
+    glQuery(payload, user).then(data => dispatch(setChartData(data.chartByCategory)));
   }
 }
