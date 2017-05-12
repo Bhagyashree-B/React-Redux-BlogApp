@@ -13,29 +13,23 @@ const categoryList = {
 }
 
 class taskForm extends React.Component {
-  state = {
-    id: this.props.task ? this.props.task.id : null,
-    title: this.props.task ? this.props.task.title : '',
-    category : this.props.task ? this.props.task.category : Object.keys(categoryList)[0],
-    startDate: moment(),
-    dueDate : moment(),
-    taskContent: this.props.task ? this.props.task.taskContent : '',
-    errors: {},
-    loading: false
+  componentWillMount() {
+    this.resetStateData()
   }
 
-  // handleChange = (e) => {
-  //   if (!!this.state.errors[e.target.name]) {
-  //     let errors = Object.assign({}, this.state.errors);
-  //     delete errors[e.target.name];
-  //     this.setState({
-  //       [e.target.name]: e.target.value,
-  //       errors
-  //     });
-  //   } else {
-  //     this.setState({ [e.target.name]: e.target.value });
-  //   }
-  // }
+  resetStateData = () => {
+    this.setState({
+      id: this.props.task ? this.props.task.id : null,
+      title: this.props.task ? this.props.task.title : '',
+      category : this.props.task ? this.props.task.category : Object.keys(categoryList)[0],
+      startDate: moment(),
+      dueDate : moment(),
+      taskContent: this.props.task ? this.props.task.taskContent : '',
+      errors: {},
+      loading: false
+    })
+  }
+  
   updateTitleState = (e) => {
       this.setState({title: e.target.value});
       console.log("        Update title => " + e.target.value )
@@ -81,9 +75,10 @@ class taskForm extends React.Component {
       const { title, category , startDate , dueDate , taskContent } = this.state;
     
         this.setState({ loading: true });
-        this.props.savetask({ title, category, startDate , dueDate , taskContent  })
-          .catch((err) => err.response.json().then(({errors}) => this.setState({ errors, loading: false })));
-    
+        this.props.savetask({ title, category, startDate , dueDate , taskContent  }).then(()=>{
+          this.setState({ loading: false })
+          this.resetStateData()
+        })    
     }
   }
 
@@ -94,7 +89,7 @@ class taskForm extends React.Component {
   render() {
     let options = [];
     for( var i in categoryList )
-      options.push(<option value={i}>{categoryList[i]}</option>)
+      options.push(<option key={i} value={i}>{categoryList[i]}</option>)
     const form = (
       <form className={classnames('ui', 'form', { loading: this.state.loading })} onSubmit={this.handleSubmit}>
 
@@ -111,7 +106,7 @@ class taskForm extends React.Component {
           <span>{this.state.errors.title}</span>
         </div>
         <div className={classnames('field', { error: !!this.state.errors.category})}>
-          <label htmlFor="category">category</label>
+          <label htmlFor="category">Category</label>
             <select name="category" className="form-control" onChange={this.handleSelectChange}>
               {options}
             </select>
@@ -120,14 +115,14 @@ class taskForm extends React.Component {
           <div className="col-md-6">
             <div className={classnames('field', { error: !!this.state.errors.startDate})}>
               <label htmlFor="startDate">Start Date</label>
-                  <DatePicker selected={this.state.startDate} onChange={this.handlestartDateChange}  />;
+                  <DatePicker selected={this.state.startDate} onChange={this.handlestartDateChange}  />
               <span>{this.state.errors.startDate}</span>
             </div>
          </div>
          <div className="col-md-6">
             <div className={classnames('field', { error: !!this.state.errors.dueDate})}>
               <label htmlFor="dueDate">Due Date</label>
-                      <DatePicker selected={this.state.dueDate} onChange={this.handledueDateChange}  />;
+                      <DatePicker selected={this.state.dueDate} onChange={this.handledueDateChange}  />
               <span>{this.state.errors.dueDate}</span>
             </div>
           </div>

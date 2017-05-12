@@ -11,15 +11,6 @@ class tasksPage extends React.Component {
 
   componentDidMount() {
     this.props.fetchtasks();
-  //  console.log(" In componentDidMount")
-    try{
-     this.props.fetchtasks().then(data => {
-      //  console.log(`parsed data from taskPPPPPPPPPPPP ${JSON.stringify(data)}`);
-        this.setState({newData : data.tasks })
-   })
-    }catch(ex){
-      console.log(ex)
-    }
   }
 
   render() {
@@ -28,7 +19,7 @@ class tasksPage extends React.Component {
       <div>
       <div className="pull-right">  < TaskFormModalPopup store = {store}/> </div>
         <h1>Tasks List</h1>
-        <TasksList tasks={this.state.newData} deletetask={this.props.deletetask} />
+        <TasksList tasks={this.props.tasks} deletetask={this.props.deletetask} />
       </div>
     );
   }

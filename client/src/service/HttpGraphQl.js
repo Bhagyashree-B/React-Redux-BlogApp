@@ -11,5 +11,12 @@ export default function glQuery(query, user) {
           resolve(request.responseText)
         }
       }
-    }).then(res => JSON.parse(res).data)  
+    }).then(res => {
+      let rs = JSON.parse(res)
+      if(rs.success === false){
+        window.localStorage.removeItem("user")
+        return
+      } else
+        return rs.data
+    })  
 }

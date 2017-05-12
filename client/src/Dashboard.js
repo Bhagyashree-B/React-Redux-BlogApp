@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Doughnut} from 'react-chartjs-2';
+import {Doughnut, Bar} from 'react-chartjs-2';
 import { connect } from 'react-redux';
 import { fetchChartData } from './actions';
 import { Link } from 'react-router-dom'
@@ -11,23 +11,33 @@ const categoryList = {
   food_drink : "Food & Drink"
 }
 
-const dataBycategory = {
- labels: [ 'Red', 'Green', 'Yellow', 'Purple' ],
+let dataBycategory = {
+ labels: [ ],
  datasets: [{
-    data: [300, 50, 100],
-    backgroundColor: [ '#FF6384', '#36A2EB', '#FFCE56', '#800080' ],
-    hoverBackgroundColor: [ '#FF6300', '#36A2AB', '#FFCE00', '#522352' ]
+    data: [],
+    backgroundColor: [ "#2ecc71", "#3498db", "#95a5a6", "#9b59b6", "#f1c40f", "#e74c3c", "#34495e",
+      '#FF6384', '#36A2EB', '#FFCE56', '#800080' ],
  }]
 };
 
-const allData = {
- labels: [ 'Red', 'Green', 'Yellow', 'Purple' ],
- datasets: [{
-    data: [300, 50, 100],
-    backgroundColor: [ '#FF6384', '#36A2EB', '#FFCE56', '#800080' ],
-    hoverBackgroundColor: [ '#FF6300', '#36A2AB', '#FFCE00', '#522352' ]
- }]
+let allData = {
+  labels: [],
+  datasets: [
+    {
+      label: 'No. of Tasks for user',
+      backgroundColor: 'rgba(27, 165, 255, 0.4)',
+      borderColor: 'rgba(27, 165, 255, 1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(98, 247, 102, 0.4)',
+      hoverBorderColor: 'rgba(98, 247, 102, 1)',
+      data: []
+    }
+  ]
 };
+
+const chartOptions = {
+    showAllTooltips: true,
+}
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -61,9 +71,10 @@ class Dashboard extends Component {
     return (
       <div className="col-sm-12">
         <div id="bloggraph" className="col-sm-8">
-          <h3>Task Chart based on category </h3>
+          <h3>Tasks - Categories </h3>
           <h1></h1>
-          { this.props.chartData.dataBycategory && this.props.chartData.dataBycategory.total ? <Doughnut data={dataBycategory}	/> : "No task added yet." }
+          { this.props.chartData.dataBycategory && this.props.chartData.dataBycategory.total ? 
+            <Doughnut data={dataBycategory} options={chartOptions}/> : "No task added yet." }
         </div>
         <div id="bloggraph" className="col-sm-4">
           <h1></h1>
@@ -75,12 +86,52 @@ class Dashboard extends Component {
           <h1></h1>
           <h1></h1>
           <h1></h1>
-          <h3>Task Chart based on all users </h3>
+          <h3>Tasks - Users</h3>
           <h1></h1>
-          <Doughnut data={allData}	/>
+          <Bar data={allData} options={chartOptions}/>
+          <h1></h1>
         </div>
       </div>
     )
+  }
+
+  componentWillMount() {
+    Chart.pluginService.register({
+      beforeRender: function (chart) {
+        if (chart.config.options.showAllTooltips) {
+          chart.pluginTooltips = [];
+          chart.config.data.datasets.forEach(function (dataset, i) {
+            chart.getDatasetMeta(i).data.forEach(function (sector, j) {
+              chart.pluginTooltips.push(new Chart.Tooltip({
+                _chart: chart.chart,
+                _chartInstance: chart,
+                _data: chart.data,
+                _options: chart.options.tooltips,
+                _active: [sector]
+              }, chart));
+            });
+          });
+          // turn off normal tooltips
+          chart.options.tooltips.enabled = false;
+        }
+      }, afterDraw: function (chart, easing) {
+        if (chart.config.options.showAllTooltips) {
+          // we don't want the permanent tooltips to animate, so don't do anything till the animation runs atleast once
+          if (!chart.allTooltipsOnce) {
+            if (easing !== 1) return;
+            chart.allTooltipsOnce = true;
+          }
+          chart.options.tooltips.enabled = true;
+          Chart.helpers.each(chart.pluginTooltips, function (tooltip) {
+            tooltip.initialize();
+            tooltip.update(); // we don't actually need this since we are not animating tooltips
+            tooltip.pivot();
+            tooltip.transition(easing).draw();
+          });
+          chart.options.tooltips.enabled = false;
+        }
+      }
+    });
   }
 }
 

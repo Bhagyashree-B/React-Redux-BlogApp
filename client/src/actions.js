@@ -122,10 +122,9 @@ export function updatetask(data) {
 
 export function deletetask(id) {
   let payload = 'mutation { deleteTask( id: "'+ id +'" ) { id } }'
-
   return (dispatch, getState) => {
     const { user } = getState();
-    return glQuery(payload, user).then(data => dispatch(taskDeleted(id)) );
+    glQuery(payload, user).then(data => dispatch(taskDeleted(id)) );
   }
 }
 
@@ -133,7 +132,7 @@ export function fetchtasks() {
   return (dispatch, getState) => {
     const { user } = getState();
     let payload = '{ tasks( userId : "'+ user._id +'") { id, userId, title, category, startDate , dueDate , taskContent}}'
-    return glQuery(payload, user).then(data => dispatch(settasks(data.tasks)));
+    glQuery(payload, user).then(data => dispatch(settasks(data.tasks)));
   }
 }
 
