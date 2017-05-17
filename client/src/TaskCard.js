@@ -40,7 +40,7 @@ export default function taskCard({ task, deletetask }) {
       </div>
       <div>
         {/* <Link to={`/task/${task.id}`} className="ui basic button green panel-button">Edit</Link> */}
-        <div className="ui basic button panel-button red" onClick={() => deletetask(task.id)}>Delete</div>
+        <div className="ui basic button panel-button red deleteTask" onClick={() => deletetask(task.id)}>Delete</div>
       </div>
     </Panel>
     </div>

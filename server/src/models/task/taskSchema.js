@@ -55,9 +55,9 @@ module.exports.getTaskByPosition = (root, {id}) => {
 module.exports.getChartDataByCategory = (root, {userId}) => {
   var dataBycategory = new Promise((resolve, reject) => {
       task.aggregate(
-        {$match : {userId : userId}}, 
+        {$match : {userId : userId}},
         {$group:{_id: '$category', count:{$sum:1}}},
-        {$project:{tmp:{category:'$_id', count:'$count'}}}, 
+        {$project:{tmp:{category:'$_id', count:'$count'}}},
         {$group:{_id:null, total:{$sum:'$tmp.count'}, data:{$addToSet:'$tmp'}}}
       ).exec((err, res) => {
       err ? reject(err) : resolve(res[0]);
@@ -65,7 +65,7 @@ module.exports.getChartDataByCategory = (root, {userId}) => {
   });
 
   var p2 = new Promise((resolve, reject) => {
-      task.aggregate( 
+      task.aggregate(
         {$group:{ _id: '$userId', count:{$sum:1}}},
         {$project:{ userId:'$_id', count:'$count'}}
       ).exec((err, res) => {
@@ -86,9 +86,9 @@ module.exports.getChartDataByCategory = (root, {userId}) => {
           )
         }
     });
-  }); 
+  });
 
-  return Promise.all([dataBycategory, p2]).then(values => { 
+  return Promise.all([dataBycategory, p2]).then(values => {
     let res = { dataBycategory : values[0], allData : values[1]}
     console.log(res); // [dataBycategory, p2]
     return res;
@@ -119,11 +119,12 @@ module.exports.updateTask = (root, {id, title, category, startDate , dueDate , t
 }
 
 module.exports.deleteTask = (root, {id}) => {
+  let taskId = id
   return new Promise((resolve, reject) => {
     task.remove(
         { id: id }
     ).exec((err, res) => {
-      err ? reject(err) : resolve(res);
+      err ?  reject(err) : resolve({id : taskId});
     });
   });
 }

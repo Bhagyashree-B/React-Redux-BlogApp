@@ -2,7 +2,7 @@ import React from 'react';
 import TaskCard from './TaskCard';
 import './css/App.css'
 
-export default function TasksList({ tasks, deletetask }) {
+export default function TasksList({ tasks = [], deletetask }) {
   const emptyMessage = (
     <p>There are no tasks yet in your collection.</p>
   );

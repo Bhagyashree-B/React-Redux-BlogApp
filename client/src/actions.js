@@ -5,6 +5,7 @@ export const ADD_TASK = 'ADD_TASK';
 export const TASK_FETCHED = 'TASK_FETCHED';
 export const TASK_UPDATED = 'TASK_UPDATED';
 export const TASK_DELETED = 'TASK_DELETED';
+export const LOGGEDIN = 'LOGGEDIN';
 
 export const LOGIN = 'LOGIN';
 require('es6-promise').polyfill();
@@ -15,20 +16,23 @@ function handleResponse(response) {
   if (response.ok) {
     return response.json();
   } else {
-    let error = new Error(response.statusText);
-    error.response = response;
-    throw error;
+  //  console.log(response.json());
+    return response.json();
+    // let error = new Error(response.statusText);
+    // error.response = response;
+    // throw error;
   }
 }
 
-export const LOGGEDIN = 'LOGGEDIN';
+
 export function loggedIn(user, token) {
-   user.token = token
-   user.isAuthenticated = true
-   return {
-      type: LOGGEDIN,
-      user
-   }
+    user.token = token
+    user.isAuthenticated = true
+   // console.log("user reponse in action.js " ,user)
+    return {
+       type: LOGGEDIN,
+       user
+    }
 }
 
 export function authenticate(data) {
@@ -58,6 +62,7 @@ export function logoutUser(data) {
 }
 
 export function settasks(tasks) {
+  console.log("\n === In settasks == ", tasks);
   return {
     type: SET_TASKS,
     tasks
@@ -65,6 +70,7 @@ export function settasks(tasks) {
 }
 
 export function addtask(task) {
+   //console.log("In addtask action === \n" , task);
   return {
     type: ADD_TASK,
     task
@@ -93,16 +99,18 @@ export function taskDeleted(taskId) {
 }
 
 export function savetask(data) {
+  //console.log("data from modal popup = > ", data);
   return (dispatch, getState) => {
     const { user } = getState();
-    const payload = 'mutation { addTask( title: "' + data.title 
-                  + '", category: "' + data.category 
-                  +'", startDate: "' + data.startDate.toISOString() 
-                  +'", dueDate: "' + data.dueDate.toISOString() 
-                  +'", taskContent: "' + data.taskContent 
-                  +'", userId: "' + user._id 
+    //console.log("action js => ", user );
+    const payload = 'mutation { addTask( title: "' + data.title
+                  + '", category: "' + data.category
+                  +'", startDate: "' + data.startDate.toISOString()
+                  +'", dueDate: "' + data.dueDate.toISOString()
+                  +'", taskContent: "' + data.taskContent
+                  +'", userId: "' + user._id
                   +'", ) { id, category, title, startDate, dueDate, taskContent } }'
-
+                  //console.log("action js payload" , payload);
     return glQuery(payload, user).then(data => dispatch(addtask(data.addTask)) );
   }
 }
@@ -121,6 +129,7 @@ export function updatetask(data) {
 }
 
 export function deletetask(id) {
+  //console.log(id)
   let payload = 'mutation { deleteTask( id: "'+ id +'" ) { id } }'
   return (dispatch, getState) => {
     const { user } = getState();
@@ -131,8 +140,11 @@ export function deletetask(id) {
 export function fetchtasks() {
   return (dispatch, getState) => {
     const { user } = getState();
+    //console.log("\n In fetchtasks actionjs user => " ,user);
     let payload = '{ tasks( userId : "'+ user._id +'") { id, userId, title, category, startDate , dueDate , taskContent}}'
-    glQuery(payload, user).then(data => dispatch(settasks(data.tasks)));
+    //console.log("\n In fetchtasks  actionjs payload => ",payload);
+    console.log(glQuery(payload, user).then(data => dispatch(settasks(data.tasks))));
+    return  glQuery(payload, user).then(data => dispatch(settasks(data.tasks)));
   }
 }
 
@@ -157,7 +169,7 @@ export function setChartData(chartData) {
 export function fetchChartData() {
   return (dispatch, getState) => {
     const { user } = getState();
-    let payload = '{ chartByCategory( userId : "'+ user._id +'") { dataBycategory { total, data {category, count} } , allData { count, userName} } }'
-    glQuery(payload, user).then(data => dispatch(setChartData(data.chartByCategory)));
+    let payload = '{ chartByCategory( userId :"'+ user._id +'") { dataBycategory { total, data {category, count} } , allData { count, userName} } }'
+  return  glQuery(payload, user).then(data => dispatch(setChartData(data.chartByCategory)));
   }
 }

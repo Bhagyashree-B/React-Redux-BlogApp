@@ -54,7 +54,7 @@ export default class LoginForm extends Component {
         <form >
           <div className="form-group">
             <label>Email</label>
-            <input name="email" className="form-control email"value={this.state.email}
+            <input name="email" ref="email" className="form-control email"value={this.state.email}
                onChange={this.updateEmailState}  placeholder="Email"/>
           </div>
           <div className="form-group">
