@@ -4,7 +4,6 @@ import { Route, Link, Redirect, Switch } from 'react-router-dom'
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import { logoutUser } from './actions';
-
 import Login from './Login';
 import Home from './Home';
 import Dashboard from './Dashboard'

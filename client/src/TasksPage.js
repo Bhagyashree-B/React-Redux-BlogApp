@@ -5,12 +5,11 @@ import { connect } from 'react-redux';
 import { fetchtasks, deletetask } from './actions';
 
 class tasksPage extends React.Component {
-  state = {
-    newData: []
-  }
-
   componentDidMount() {
-    this.props.fetchtasks();
+    console.log(" \n\n ------In componentDidMount --------- \n \n  In fetchtasks taskpage =========")
+    this.props.fetchtasks().then( data => {
+      console.log(" \n\n ------In componentDidMount --------- \n \n  In fetchtasks taskpage =========" , data);
+    })
   }
 
   render() {
@@ -32,7 +31,6 @@ tasksPage.propTypes = {
 }
 
 function mapStateToProps(state) {
-  newData : state.tasks
   return {
     tasks: state.tasks
   }

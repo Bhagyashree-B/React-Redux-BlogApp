@@ -11,6 +11,10 @@ import LoginForm from './LoginForm';
     response:''
   }
 
+  login1 = ({ email, password }) => {
+
+  }
+
   login = ({ email, password }) => {
       this.props.authenticate({ email, password }).then(data => {
         if(data.hasOwnProperty('success') && data.success === false)

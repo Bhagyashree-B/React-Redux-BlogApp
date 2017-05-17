@@ -137,7 +137,7 @@ export function fetchtasks() {
   return (dispatch, getState) => {
     const { user } = getState();
     let payload = '{ tasks( userId : "'+ user._id +'") { id, userId, title, category, startDate , dueDate , taskContent}}'
-    glQuery(payload, user).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(settasks(data.tasks)));
+    return glQuery(payload, user).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(settasks(data.tasks)));
   }
 }
 
@@ -163,7 +163,7 @@ export function fetchChartData() {
   return (dispatch, getState) => {
     const { user } = getState();
     let payload = '{ chartByCategory( userId : "'+ user._id +'") { dataBycategory { total, data {category, count} } , allData { count, userName} } }'
-    glQuery(payload, user).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(setChartData(data.chartByCategory)) );
+    return glQuery(payload, user).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(setChartData(data.chartByCategory)) );
   }
 }
 

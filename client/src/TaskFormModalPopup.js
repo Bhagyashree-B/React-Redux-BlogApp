@@ -21,6 +21,7 @@ class TaskFormModalPopup extends React.Component {
   }
 
   savetask = ({ title, category, startDate , dueDate , taskContent }) => {
+    console.log("In savetask modal opopup \n ");
     // if (_id) {
     //   return this.props.updatetask({ _id, title, taskContent }).then(
     //     () => { this.setState({ redirect: true })},

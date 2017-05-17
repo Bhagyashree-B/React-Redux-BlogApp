@@ -2,11 +2,14 @@ import { SET_TASKS, ADD_TASK, TASK_FETCHED, TASK_UPDATED, TASK_DELETED, LOGOUT }
 
 export default function tasks(state = [], action = {}) {
   switch(action.type) {
-    case ADD_TASK:
+    case ADD_TASK: {
+      console.log( "  action.task => ", action.task);
       return [
         ...state,
         action.task
       ];
+    }
+
 
     case TASK_DELETED:
       return state.filter(item => item.id !== action.taskId);
@@ -31,8 +34,11 @@ export default function tasks(state = [], action = {}) {
         ];
       }
 
-    case SET_TASKS:
-      return action.tasks;
+    case SET_TASKS:{
+        console.log( "  action.task => ", action.task);
+        return action.tasks;
+    }
+
 
     case LOGOUT:
       return [];

@@ -140,31 +140,27 @@ setTimeout(function() {
      });
   });
 
-  // describe('\n View task \n', () =>  {
-  //
-  //   // it('Get data from database', () => {
-  //   //     // expect(wrapperTaskPage.WrappedComponent).to.not.be.null
-  //   //     expect(fetchtasks.calledOnce).to.equal(true);
-  //   // });
-  //   // it('Set data to props of Taskpage ', () => {
-  //   //     wrapperTaskPage.setProps({ tasks: tasks });
-  //   //     expect(wrapperTaskPage.props().tasks).to.equal(tasks);
-  //   // });
-  //   it('Displaying tasks', function(done) {
-  //     this.timeout(15000);
-  //         setTimeout(function () {
-  //           const fetchtasks =  sinon.spy(TaskPage.prototype, 'componentDidMount');
-  //           const deletetask = sinon.spy();
-  //           wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
-  //           // console.log("store => ", store.tasks);
-  //             console.log(wrapperTaskPage.find(TasksList).html());
-  //             expect(wrapperTaskPage.find(TasksList).html()).to.not.equal("<div><p>There are no tasks yet in your collection.</p></div>");
-  //           done();
-  //
-  //
-  //     }, 6000);
-  //   });
-  // });
+  describe('\n Delete task \n', () =>  {
+
+    // it('Get data from database', () => {
+    //     // expect(wrapperTaskPage.WrappedComponent).to.not.be.null
+    //     expect(fetchtasks.calledOnce).to.equal(true);
+    // });
+    // it('Set data to props of Taskpage ', () => {
+    //     wrapperTaskPage.setProps({ tasks: tasks });
+    //     expect(wrapperTaskPage.props().tasks).to.equal(tasks);
+    // });
+    it.skip('Delete tasks', function(done) {
+      this.timeout(15000);
+          setTimeout(function () {
+            const fetchtasks =  sinon.spy(TaskPage.prototype, 'componentDidMount');
+            const deletetask = sinon.spy();
+            wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
+            wrapperTaskPage.find(TaskForm).find('.deleteTask').simulate('click')
+            done();
+      }, 6000);
+    });
+  });
 }, 5000);
 
 });
