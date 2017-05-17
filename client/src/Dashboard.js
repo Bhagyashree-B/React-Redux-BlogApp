@@ -123,7 +123,7 @@ class Dashboard extends Component {
       allData.xAxis.categories = []
       allData.series[0].data = []
       this.props.chartData.allData.map( val => {
-        allData.xAxis.categories.push(val.userName)
+        allData.xAxis.categories.push(val.userName)  
         allData.series[0].data.push(Number(val.count))
       })
     }
@@ -132,13 +132,13 @@ class Dashboard extends Component {
       <div className="col-sm-12">
         <div id="bloggraph" className="col-sm-8">
           <br></br>
-          { this.props.chartData.dataBycategory && this.props.chartData.dataBycategory.total ?
+          { this.props.chartData.dataBycategory && this.props.chartData.dataBycategory.total ? 
             <ReactHighcharts config = {dataBycategory}></ReactHighcharts> : "No task added yet." }
         </div>
         <div id="bloggraph" className="col-sm-4">
           <br></br>
           <p>Total task count : { this.props.chartData.dataBycategory ? this.props.chartData.dataBycategory.total : 0 }</p>
-        
+          <p><Link to="/tasks" className="">View Tasks</Link></p>
         </div>
 
         <div id="bloggraph" className="col-sm-8">
