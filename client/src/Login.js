@@ -13,7 +13,8 @@ import LoginForm from './LoginForm';
 
   login = ({ email, password }) => {
       this.props.authenticate({ email, password }).then(data => {
-          //  console.log(`parsed data ${JSON.stringify(data.type)}`);
+        if(data.hasOwnProperty('success') && data.success === false)
+          this.setState({ response : data})
     })
   }
 
@@ -23,7 +24,7 @@ import LoginForm from './LoginForm';
         {
           this.state.redirect ?
           <Redirect to="/posts" /> :
-          <LoginForm login={this.login} />
+          <LoginForm login={this.login} authError={this.state.response}/>
         }
       </div>
     );

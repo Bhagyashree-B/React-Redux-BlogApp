@@ -119,11 +119,12 @@ module.exports.updateTask = (root, {id, title, category, startDate , dueDate , t
 }
 
 module.exports.deleteTask = (root, {id}) => {
+  let taskId = id
   return new Promise((resolve, reject) => {
     task.remove(
         { id: id }
     ).exec((err, res) => {
-      err ? reject(err) : resolve(res);
+      err ? reject(err) : resolve({id : taskId});
     });
   });
 }

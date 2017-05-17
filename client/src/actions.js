@@ -40,7 +40,12 @@ export function authenticate(data) {
         "Content-Type": "application/json"
       }
     }).then(handleResponse)
-    .then(data => dispatch(loggedIn(data.user, data.token)));
+    .then(data => {
+      if(data.success === false )
+        return data
+      else
+        return dispatch(loggedIn(data.user, data.token))
+  });
   }
 }
 
@@ -103,7 +108,7 @@ export function savetask(data) {
                   +'", userId: "' + user._id 
                   +'", ) { id, category, title, startDate, dueDate, taskContent } }'
 
-    return glQuery(payload, user).then(data => dispatch(addtask(data.addTask)) );
+    return glQuery(payload, user).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(addtask(data.addTask)) );
   }
 }
 
@@ -124,7 +129,7 @@ export function deletetask(id) {
   let payload = 'mutation { deleteTask( id: "'+ id +'" ) { id } }'
   return (dispatch, getState) => {
     const { user } = getState();
-    glQuery(payload, user).then(data => dispatch(taskDeleted(id)) );
+    glQuery(payload, user).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(taskDeleted(data.deleteTask.id)) );
   }
 }
 
@@ -132,7 +137,7 @@ export function fetchtasks() {
   return (dispatch, getState) => {
     const { user } = getState();
     let payload = '{ tasks( userId : "'+ user._id +'") { id, userId, title, category, startDate , dueDate , taskContent}}'
-    glQuery(payload, user).then(data => dispatch(settasks(data.tasks)));
+    glQuery(payload, user).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(settasks(data.tasks)));
   }
 }
 
@@ -140,7 +145,7 @@ export function fetchtask(id) {
   return dispatch => {
     fetch(`/api/tasks/${id}`)
       .then(res => res.json())
-      .then(data => dispatch(taskFetched(data.task)));
+      .then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(taskFetched(data.task)));
   }
 }
 
@@ -158,6 +163,14 @@ export function fetchChartData() {
   return (dispatch, getState) => {
     const { user } = getState();
     let payload = '{ chartByCategory( userId : "'+ user._id +'") { dataBycategory { total, data {category, count} } , allData { count, userName} } }'
-    glQuery(payload, user).then(data => dispatch(setChartData(data.chartByCategory)));
+    glQuery(payload, user).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(setChartData(data.chartByCategory)) );
   }
+}
+
+function hasGraphQlError(response) {
+  if(response.hasOwnProperty('success') && response.success === false){
+    window.localStorage.removeItem("user")
+    return true
+  } else 
+    return false
 }

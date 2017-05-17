@@ -140,7 +140,7 @@ class Dashboard extends Component {
           <p>Total task count : { this.props.chartData.dataBycategory ? this.props.chartData.dataBycategory.total : 0 }</p>
           <p><Link to="/tasks" className="">View Tasks</Link></p>
         </div>
-
+        
         <div id="bloggraph" className="col-sm-8">
           <br></br>
           <br></br>

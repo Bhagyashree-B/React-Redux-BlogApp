@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 // function setErrorMsg(error) {
 //   return {
-//     loginMessage: error
+//     authError: error
 //   }
 // }
 
@@ -12,12 +12,16 @@ export default class LoginForm extends Component {
       this.state = {
         email: "",
         password :"",
-        loginMessage: null
+        authError: props.authError
       }
       this.updateEmailState = this.updateEmailState.bind(this);
       this.updatePasswordState = this.updatePasswordState.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this)
    }
+
+  componentWillReceiveProps ({authError}) {
+    this.setState({authError: authError})
+  }
 
   handleSubmit() {
     //e.preventDefault()
@@ -65,12 +69,12 @@ export default class LoginForm extends Component {
              placeholder="Password" />
           </div>
           {
-            this.state.loginMessage &&
+            this.state.authError.message ?
             <div className="alert alert-danger" role="alert">
               <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
               <span className="sr-only">Error:</span>
-              &nbsp;{this.state.loginMessage}
-            </div>
+              &nbsp;{this.state.authError.message}
+            </div> : ''
           }
         </form>
         <button type="button" onClick={this.handleSubmit.bind(this)} className="btn btn-primary loginbtn">Login</button>
