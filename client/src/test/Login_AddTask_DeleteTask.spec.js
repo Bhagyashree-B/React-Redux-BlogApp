@@ -122,9 +122,13 @@ setTimeout(function() {
         wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'description Loreum ipsum'}});
         expect(wrapperTaskFormModalPopup.find('input').find('.taskContent').prop('value')).to.not.equal(null);
     });
+    it('Add task status', () => {
+        wrapperTaskFormModalPopup.find(TaskForm).find('.status').simulate('change', {target: {value: 'inprogress'}});
+        expect(wrapperTaskFormModalPopup.find('select.status').find('option')).to.not.equal(null);
+    });
     it('Add task category', () => {
         wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'food_drink'}});
-        expect(wrapperTaskFormModalPopup.find('select').find('option')).to.not.equal(null);
+        expect(wrapperTaskFormModalPopup.find('select.category').find('option')).to.not.equal(null);
     });
     it('Click to add task and Close modal popup', () => {
         wrapperTaskFormModalPopup.find(TaskForm).find('.saveTaskBtn').simulate('click')

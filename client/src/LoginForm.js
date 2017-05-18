@@ -73,7 +73,7 @@ export default class LoginForm extends Component {
             <div className="alert alert-danger" role="alert">
               <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
               <span className="sr-only">Error:</span>
-              &nbsp;{this.state.authError.message}
+              &nbsp;<span className="error-message">{this.state.authError.message}</span>
             </div> : ''
           }
         </form>

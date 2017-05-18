@@ -72,6 +72,21 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
       // sinon.assert.called(loginHandleSubmit)
        done();
     });
+
+    it('Check if : Authentication failed. User not found.', function() {
+      setTimeout(function () {
+        expect(wrapperData.find("div.alert-danger").find(".error-message").html())
+          .to.not.equal('<span class="error-message">Authentication failed. User not found.</span>')
+      }, 5000);
+    });
+
+    it('Check if : Authentication failed. Wrong password.', function() {
+      setTimeout(function () {
+        expect(wrapperData.find("div.alert-danger").find(".error-message").html())
+          .to.not.equal('<span class="error-message">Authentication failed. Wrong password.</span>')
+      }, 5000);
+    });
+
     it('Give token from api response', function(done) {
         this.timeout(5000);
         setTimeout(function () {
@@ -122,9 +137,13 @@ setTimeout(function() {
         wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'description Loreum ipsum'}});
         expect(wrapperTaskFormModalPopup.find('input').find('.taskContent').prop('value')).to.not.equal(null);
     });
+    it('Add task status', () => {
+        wrapperTaskFormModalPopup.find(TaskForm).find('.status').simulate('change', {target: {value: 'inprogress'}});
+        expect(wrapperTaskFormModalPopup.find('select.status').find('option')).to.not.equal(null);
+    });
     it('Add task category', () => {
         wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'food_drink'}});
-        expect(wrapperTaskFormModalPopup.find('select').find('option')).to.not.equal(null);
+        expect(wrapperTaskFormModalPopup.find('select.category').find('option')).to.not.equal(null);
     });
     it('Click to add task and Close modal popup', () => {
         wrapperTaskFormModalPopup.find(TaskForm).find('.saveTaskBtn').simulate('click')

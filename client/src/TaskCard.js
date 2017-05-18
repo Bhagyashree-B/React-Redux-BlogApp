@@ -4,6 +4,12 @@ import {Panel } from 'react-bootstrap';
 import  './css/TaskCard.css';
 import moment from 'moment';
 
+const statusList = {
+  to_be_done : "To Be Done",
+  inprogress : "In Progress",
+  completed : "Completed"
+}
+
 const categoryList = {
   arts_entertainment : "Arts & Entertainment",
   beauty_fitness : "Beauty & Fitness",
@@ -20,6 +26,10 @@ export default function taskCard({ task, deletetask }) {
       <div className="panel-content">
         <table>
           <tbody>
+          <tr>
+            <td>Status : </td>
+            <td>{ statusList[task.status] ? statusList[task.status] : "NA"}</td>
+          </tr>
           <tr>
             <td>Category : </td>
             <td>{ categoryList[task.category] ? categoryList[task.category] : "other"}</td>

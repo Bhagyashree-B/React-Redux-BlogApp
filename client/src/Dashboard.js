@@ -5,11 +5,10 @@ import { Link } from 'react-router-dom'
 import ReactHighcharts from 'react-highcharts';
 import Highcharts from 'highcharts';
 
-const categoryList = {
-  arts_entertainment : "Arts & Entertainment",
-  beauty_fitness : "Beauty & Fitness",
-  books_literature : "Books & Literature",
-  food_drink : "Food & Drink"
+const statusList = {
+  to_be_done : "To Be Done",
+  inprogress : "In Progress",
+  completed : "Completed"
 }
 
 let dataBycategory = {
@@ -20,7 +19,7 @@ let dataBycategory = {
         type: 'pie'
     },
     title: {
-        text: 'Tasks - Categories Chart'
+        text: 'Tasks - Status Chart'
     },
     tooltip: {
         pointFormat: '{series.name}: <b>{point.y}</b>'
@@ -56,7 +55,7 @@ let allData = {
         type: 'column'
     },
     title: {
-        text: 'Tasks - Users Chart'
+        text: 'Users - Tasks(In Progress) Chart'
     },
     xAxis: {
         categories: []
@@ -64,7 +63,7 @@ let allData = {
     yAxis: {
         min: 0,
         title: {
-            text: 'Number of tasks'
+            text: 'Number of tasks(In Progress)'
         },
         stackLabels: {
             enabled: true,
@@ -76,7 +75,7 @@ let allData = {
     },
     tooltip: {
         headerFormat: '<b>{point.x}</b><br/>',
-        pointFormat: 'Tasks: {point.y}'
+        pointFormat: 'In Progress Tasks: {point.y}'
     },
     plotOptions: {
         column: {
@@ -110,8 +109,8 @@ class Dashboard extends Component {
       dataBycategory.series[0].data = []
       this.props.chartData.dataBycategory.data.map( val => {
         let name
-        if(categoryList[val.category])
-          name = categoryList[val.category]
+        if(statusList[val.status])
+          name = statusList[val.status]
         else
           name = "Others"
 

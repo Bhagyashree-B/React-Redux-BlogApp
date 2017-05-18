@@ -20,14 +20,14 @@ class TaskFormModalPopup extends React.Component {
     this.setState({ showModal: true });
   }
 
-  savetask = ({ title, category, startDate , dueDate , taskContent }) => {
+  savetask = ({ title, status, category, startDate , dueDate , taskContent }) => {
     console.log("In savetask modal opopup \n ");
     // if (_id) {
     //   return this.props.updatetask({ _id, title, taskContent }).then(
     //     () => { this.setState({ redirect: true })},
     //   );
     // } else {
-      return this.props.savetask({ title, category, startDate , dueDate , taskContent }).then(
+      return this.props.savetask({ title, status, category, startDate , dueDate , taskContent }).then(
         () => { this.close() },
       );
     // }

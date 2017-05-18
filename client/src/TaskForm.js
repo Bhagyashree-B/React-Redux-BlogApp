@@ -12,6 +12,12 @@ const categoryList = {
   food_drink : "Food & Drink"
 }
 
+const statusList = {
+  to_be_done : "To Be Done",
+  inprogress : "In Progress",
+  completed : "Completed"
+}
+
 class taskForm extends React.Component {
   componentWillMount() {
     this.resetStateData()
@@ -21,6 +27,7 @@ class taskForm extends React.Component {
     this.setState({
       id: this.props.task ? this.props.task.id : null,
       title: this.props.task ? this.props.task.title : '',
+      status : this.props.task ? this.props.task.status : Object.keys(statusList)[0],
       category : this.props.task ? this.props.task.category : Object.keys(categoryList)[0],
       startDate: moment(),
       dueDate : moment(),
@@ -54,16 +61,19 @@ class taskForm extends React.Component {
     });
   }
 
-  handleSelectChange = (e) => {
-    console.log("        Update select option => " + e.target.value )
+  handleStatusChange = (e) => {
+    this.setState({
+      status : e.target.value
+    });
+  }
+
+  handleCategoryChange = (e) => {
     this.setState({
       category : e.target.value
     });
   }
 
   handleSubmit = (e) => {
-  //  e.preventDefault();
-
     // validation
     let errors = {};
     if (this.state.title === '') errors.title = "Can't be empty";
@@ -75,10 +85,10 @@ class taskForm extends React.Component {
     const isValid = Object.keys(errors).length === 0
 
     if (isValid) {
-        const { title, category , startDate , dueDate , taskContent } = this.state;
+        const { title, status, category , startDate , dueDate , taskContent } = this.state;
         console.log("In isValid");
         this.setState({ loading: true });
-        this.props.savetask({ title, category, startDate , dueDate , taskContent  }).then(()=>{
+        this.props.savetask({ title, status, category, startDate , dueDate , taskContent  }).then(()=>{
           this.setState({ loading: false })
           this.resetStateData()
         })
@@ -90,14 +100,14 @@ class taskForm extends React.Component {
   }
 
   render() {
-    let options = [];
+    let statusOptions = [], categoryOptions = [];
+    for( var i in statusList )
+      statusOptions.push(<option key={i} value={i}>{statusList[i]}</option>)
     for( var i in categoryList )
-      options.push(<option key={i} value={i}>{categoryList[i]}</option>)
+      categoryOptions.push(<option key={i} value={i}>{categoryList[i]}</option>)
     const form = (
       <form className={classnames('ui', 'form', { loading: this.state.loading })} >
-
         {!!this.state.errors.global && <div className="ui negative message"><p>{this.state.errors.global}</p></div>}
-
         <div className={classnames('field', { error: !!this.state.errors.title})}>
           <label htmlFor="title">Title</label>
           <input
@@ -109,13 +119,19 @@ class taskForm extends React.Component {
           />
           <span>{this.state.errors.title}</span>
         </div>
+        <div className={classnames('field', { error: !!this.state.errors.status})}>
+          <label htmlFor="status">Status</label>
+            <select name="status" className="form-control status" onChange={this.handleStatusChange}>
+              {statusOptions}
+            </select>
+        </div>
         <div className={classnames('field', { error: !!this.state.errors.category})}>
           <label htmlFor="category">Category</label>
-            <select name="category" className="form-control category" onChange={this.handleSelectChange}>
-              {options}
+            <select name="category" className="form-control category" onChange={this.handleCategoryChange}>
+              {categoryOptions}
             </select>
-      </div>
-      <div className="row">
+        </div>
+        <div className="row">
           <div className="col-md-6">
             <div className={classnames('field', { error: !!this.state.errors.startDate})}>
               <label htmlFor="startDate">Start Date</label>
@@ -144,8 +160,8 @@ class taskForm extends React.Component {
         </div>
 
         <div className="field text-center">
-          <button onClick={this.handleCancel} className="ui button">Cancel</button>
-          <button type="submit" className="ui primary button saveTaskBtn" onClick={this.handleSubmit}>Save</button>
+          <button type="button" onClick={this.handleCancel} className="ui button">Cancel</button>
+          <button type="button" onClick={this.handleSubmit} className="ui primary button saveTaskBtn">Save</button>
         </div>
       </form>
     );
