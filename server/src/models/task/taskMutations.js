@@ -23,6 +23,10 @@ export default {
         name:'title',
         type:new GraphQLNonNull(GraphQLString)
       },
+      status:{
+        name:'status',
+        type: GraphQLString
+      },
       category:{
         name:'category',
         type: GraphQLString
@@ -51,6 +55,10 @@ export default {
       title:{
         name:'title',
         type:new GraphQLNonNull(GraphQLString)
+      },
+      status:{
+        name:'status',
+        type: GraphQLString
       },
       category:{
         name:'category',

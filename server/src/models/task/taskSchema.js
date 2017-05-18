@@ -6,6 +6,7 @@ var taskSchema = new mongoose.Schema({
   id: { type:String, required:true, unique:true, index:true, default:mongoose.Types.ObjectId },
   userId: { type:String, required:true, default:mongoose.Types.ObjectId },
   title: String,
+  status: String,
   category: String,
   startDate: String,
   dueDate: String,
@@ -52,12 +53,12 @@ module.exports.getTaskByPosition = (root, {id}) => {
   });
 };
 
-module.exports.getChartDataByCategory = (root, {userId}) => {
+module.exports.getChartDataByCategory = (root, {userId, statusValue}) => {
   var dataBycategory = new Promise((resolve, reject) => {
       task.aggregate(
         {$match : {userId : userId}},
-        {$group:{_id: '$category', count:{$sum:1}}},
-        {$project:{tmp:{category:'$_id', count:'$count'}}},
+        {$group:{_id: '$status', count:{$sum:1}}},
+        {$project:{tmp:{status:'$_id', count:'$count'}}},
         {$group:{_id:null, total:{$sum:'$tmp.count'}, data:{$addToSet:'$tmp'}}}
       ).exec((err, res) => {
       err ? reject(err) : resolve(res[0]);
@@ -66,6 +67,7 @@ module.exports.getChartDataByCategory = (root, {userId}) => {
 
   var p2 = new Promise((resolve, reject) => {
       task.aggregate(
+        {$match : {status : statusValue}},
         {$group:{ _id: '$userId', count:{$sum:1}}},
         {$project:{ userId:'$_id', count:'$count'}}
       ).exec((err, res) => {
@@ -95,8 +97,8 @@ module.exports.getChartDataByCategory = (root, {userId}) => {
   });
 };
 
-module.exports.addTask = (root, {userId, title, category, startDate , dueDate , taskContent }) => {
-  var newTask = new task({userId: ObjectId(userId), title:title, category:category, startDate:startDate, dueDate:dueDate, taskContent:taskContent});
+module.exports.addTask = (root, {userId, title, status, category, startDate , dueDate , taskContent }) => {
+  var newTask = new task({userId: ObjectId(userId), title:title, status:status, category:category, startDate:startDate, dueDate:dueDate, taskContent:taskContent});
 
   return new Promise((resolve, reject) => {
     newTask.save((err, res) => {
@@ -105,8 +107,8 @@ module.exports.addTask = (root, {userId, title, category, startDate , dueDate , 
   });
 }
 
-module.exports.updateTask = (root, {id, title, category, startDate , dueDate , taskContent }) => {
-  var updateTask = {title:title, category:category, startDate:startDate, dueDate:dueDate, taskContent:taskContent};
+module.exports.updateTask = (root, {id, title, status, category, startDate , dueDate , taskContent }) => {
+  var updateTask = {title:title, status:status, category:category, startDate:startDate, dueDate:dueDate, taskContent:taskContent};
   return new Promise((resolve, reject) => {
     task.findOneAndUpdate(
         { id: id },

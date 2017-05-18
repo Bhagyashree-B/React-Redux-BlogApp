@@ -19,7 +19,7 @@ var dataBycategoryType = new GraphQLObjectType({
         name: 'chartData',
         description: 'Chart chart object',
         fields: () => ({
-            category: { type: GraphQLString },
+            status: { type: GraphQLString },
             count: { type: GraphQLInt },
         })
       })

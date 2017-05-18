@@ -22,6 +22,9 @@ export default new GraphQLObjectType({
     title: {
       type: new GraphQLNonNull(GraphQLString)
     },
+    status: {
+      type: GraphQLString
+    },
     category: {
       type: GraphQLString
     },

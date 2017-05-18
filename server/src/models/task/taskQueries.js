@@ -54,6 +54,9 @@ export default {
     args: {
       userId: {
         type: GraphQLString
+      },
+      statusValue: {
+        type: GraphQLString
       }
     },
     resolve: task.getChartDataByCategory
