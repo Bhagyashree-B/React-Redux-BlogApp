@@ -30,7 +30,6 @@
 // describe('\n Dashboard-Graph-Link \n ', () => {
 //   let wrapperData;
 //   const fetchChartData = sinon.spy();
-//     // console.log(wrapperTaskPage.find(TasksList).html());
 //   before(function() {
 //     // const context = { router: { isActive: (a, b) => true } };
 //     // const renderedComponent = shallow(<NavLink to="/home" />, { context });
@@ -41,10 +40,8 @@
 //   });
 //   describe('\n Dashboard \n', () => {
 //     it('Add username', () => {
-//       console.log(wrapperData.debug());
 //         //  wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'test'}});
 //         //  var input = <input name="email" class="form-control email" value="test" placeholder="Email">
-//         // console.log(wrapperData.find(LoginForm).ref('email').text());
 //         //  expect(wrapperData.ref('email').prop('value')).to.equal("4");
 //     });
 //   });

@@ -7,21 +7,16 @@ const user = (state = [], action = {}) => {
          return state;
 
       case LOGGEDIN:
-      {
         window.localStorage.setItem("user", JSON.stringify(action.user))
-       console.log("In users reducers " , action.user)
         return action.user;
-      }
-
 
       case LOGOUT:
         window.localStorage.removeItem("user")
         return {};
 
       default:
-       {
         let savedState = JSON.parse(window.localStorage.getItem("user")) || {}
-        return savedState;}
+        return savedState;
    }
 };
 

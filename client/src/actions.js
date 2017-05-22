@@ -10,6 +10,7 @@ export const LOGIN = 'LOGIN';
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
+let userState = {};
 
 function handleResponse(response) {
   if (response.ok) {
@@ -23,6 +24,7 @@ function handleResponse(response) {
 
 export const LOGGEDIN = 'LOGGEDIN';
 export function loggedIn(user, token) {
+   userState = user ;
    user.token = token
    user.isAuthenticated = true
    return {
@@ -130,7 +132,7 @@ export function deletetask(id) {
   let payload = 'mutation { deleteTask( id: "'+ id +'" ) { id } }'
   return (dispatch, getState) => {
     const { user } = getState();
-    glQuery(payload, user).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(taskDeleted(data.deleteTask.id)) );
+    glQuery(payload, userState).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(taskDeleted(data.deleteTask.id)) );
   }
 }
 

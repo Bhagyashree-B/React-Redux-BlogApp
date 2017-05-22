@@ -10,18 +10,16 @@ class TaskFormModalPopup extends React.Component {
   }
 
   close = () => {
-    console.log("        Click to close modal popup");
     this.setState({ showModal: false });
-    $('#myModal').modal('hide')
+    if(process.env.NODE_ENV !== "test")
+      $('#myModal').modal('hide')
   }
 
   open = () => {
-    console.log("        Click to open modal popup");
     this.setState({ showModal: true });
   }
 
   savetask = ({ title, status, category, startDate , dueDate , taskContent }) => {
-    console.log("In savetask modal opopup \n ");
     // if (_id) {
     //   return this.props.updatetask({ _id, title, taskContent }).then(
     //     () => { this.setState({ redirect: true })},

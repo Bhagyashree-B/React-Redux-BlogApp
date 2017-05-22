@@ -82,7 +82,7 @@ app.post('/api/login', function(req, res) {
         // if user is found and password is right
         // create a token
         var token = jwt.sign(user, app.get('superSecret'), {
-          expiresIn: 1440 // expires in 24 hours
+          expiresIn: 60*60*24 // expires in 24 hours
         });
 
         delete user.password
@@ -110,6 +110,7 @@ app.use(function(req, res, next) {
     // verifies secret and checks exp
     jwt.verify(token, app.get('superSecret'), function(err, decoded) {
       if (err) {
+        console.log("Failed to authenticate token." + err)
         return res.json({ success: false, message: 'Failed to authenticate token.' });
       } else {
         // if everything is good, save to request for use in other routes

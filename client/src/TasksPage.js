@@ -6,10 +6,7 @@ import { fetchtasks, deletetask } from './actions';
 
 class tasksPage extends React.Component {
   componentDidMount() {
-    console.log(" \n\n ------In componentDidMount --------- \n \n  In fetchtasks taskpage =========")
-    this.props.fetchtasks().then( data => {
-      console.log(" \n\n ------In componentDidMount --------- \n \n  In fetchtasks taskpage =========" , data);
-    })
+    this.props.fetchtasks()
   }
 
   render() {

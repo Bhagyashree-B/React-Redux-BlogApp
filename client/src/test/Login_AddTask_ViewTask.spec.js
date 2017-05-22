@@ -25,9 +25,10 @@ global.AssertionError = chai.AssertionError;
 global.Assertion = chai.Assertion;
 global.expect = chai.expect;
 global.assert = chai.assert;
-
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 describe('\n Login-AddTask-ViewTask \n ', () => {
+  let taskTitle = "Get milk"
   let wrapperData;
   let wrapperTaskForm
   let wrapperTaskFormModalPopup;
@@ -59,70 +60,70 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
   });
 
   describe('\n Login \n', () => {
-    it('Add username', () => {
-        wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'test'}});
-        expect(wrapperData.find('input').find('.email').prop('value')).to.equal("test");
+    it('Add username - test2', () => {
+        wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'test2'}});
+        expect(wrapperData.find('input').find('.email').prop('value')).to.equal("test2");
     });
-    it('Add password', () => {
+    it('Add password - 12345', () => {
         wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: '12345'}});
         expect(wrapperData.find('input').find('.password').prop('value')).to.equal("12345");
     });
-    it('Click to login', function(done) {
+    it('Login successfull', function(done) {
       wrapperData.find('.loginbtn').simulate('click')
-      // sinon.assert.called(loginHandleSubmit)
-       done();
+       setTimeout(function () {
+         const state = store.getState();
+         expect(state.user.isAuthenticated).to.equal(true)
+         done();
+       }, 3000);
     });
+    // it('Login successfull', function() {
+    //    setTimeout(function () {
+    //      const state = store.getState();
+    //      expect(state.user.isAuthenticated).to.equal(true)
+    //    }, 3000);
+    // });
 
-    it('Check if : Authentication failed. User not found.', function() {
-      setTimeout(function () {
-        expect(wrapperData.find("div.alert-danger").find(".error-message").html())
-          .to.not.equal('<span class="error-message">Authentication failed. User not found.</span>')
-      }, 5000);
-    });
+    // it('Check if : Authentication failed. User not found.', function() {
+    //   setTimeout(function () {
+    //     expect(wrapperData.find("div.alert-danger").find(".error-message").html())
+    //       .to.not.equal('<span class="error-message">Authentication failed. User not found.</span>')
+    //   }, 5000);
+    // });
 
-    it('Check if : Authentication failed. Wrong password.', function() {
-      setTimeout(function () {
-        expect(wrapperData.find("div.alert-danger").find(".error-message").html())
-          .to.not.equal('<span class="error-message">Authentication failed. Wrong password.</span>')
-      }, 5000);
-    });
+    // it('Check if : Authentication failed. Wrong password.', function() {
+    //   setTimeout(function () {
+    //     expect(wrapperData.find("div.alert-danger").find(".error-message").html())
+    //       .to.not.equal('<span class="error-message">Authentication failed. Wrong password.</span>')
+    //   }, 5000);
+    // });
 
-    it('Give token from api response', function(done) {
-        this.timeout(5000);
-        setTimeout(function () {
-          const state = store.getState();
-            expect(state.tasks).to.not.be.undefined;
-            done();
-          //  console.log("state task === > \n\n " , state.tasks);
-        }, 5000);
-     });
-    it('add user auth token to local storage', () => {
-      const state = JSON.stringify(store.getState().user);
+    it('Add user auth token to local storage', () => {
+      const stateUser = JSON.stringify(store.getState().user);
       const spy = sinon.spy(global.window.localStorage, "setItem");
-      spy(state);
+      spy(stateUser);
       expect(spy.calledWith( {
-        state
+        stateUser
       }));
       spy.restore();
-
       // const stub = sinon.stub(global.window.localStorage, 'getItem');
-      // stub(state);
-      // expect(stub.calledWith(Object.keys(state)));
+      // stub(stateUser);
+      // expect(stub.calledWith(Object.keys(stateUser)));
       // stub.restore();
     });
   });
 
-setTimeout(function() {
-
+// setTimeout(function() {
   describe('\n Add task \n' , () => {
-    wrapperTaskFormModalPopup = mount(<TaskFormModalPopup savetask={savetask} store={store}  />)
-
-    it('Open modal popup', () => {
-        console.log(wrapperTaskFormModalPopup.html());
-        wrapperTaskFormModalPopup.find('.modalBtn').simulate('click')
+    it('Open New task window', function(done) {
+      wrapperTaskFormModalPopup = mount(<TaskFormModalPopup savetask={savetask} store={store}  />)
+      done();
     });
-    it('Add title', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: 'title Loreum ipsum'}});
+    it('Open modal popup', function() {
+        wrapperTaskFormModalPopup.find('.modalBtn').simulate('click')
+        // expect(wrapperTaskFormModalPopup.state().showModal).to.equal(true)
+    });
+    it('Add title - ' + taskTitle, () => {
+        wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: taskTitle}});
         expect(wrapperTaskFormModalPopup.find('input').find('.title').prop('value')).to.not.equal(null);
     });
     it('Add start date', () => {
@@ -134,10 +135,10 @@ setTimeout(function() {
         expect(wrapperTaskFormModalPopup.find('input').find('.startDate').prop('value')).to.not.equal(null);
     });
     it('Add task description', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'description Loreum ipsum'}});
+        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'tt'}});
         expect(wrapperTaskFormModalPopup.find('input').find('.taskContent').prop('value')).to.not.equal(null);
     });
-    it('Add task status', () => {
+      it('Add task status', () => {
         wrapperTaskFormModalPopup.find(TaskForm).find('.status').simulate('change', {target: {value: 'inprogress'}});
         expect(wrapperTaskFormModalPopup.find('select.status').find('option')).to.not.equal(null);
     });
@@ -145,45 +146,28 @@ setTimeout(function() {
         wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'food_drink'}});
         expect(wrapperTaskFormModalPopup.find('select.category').find('option')).to.not.equal(null);
     });
-    it('Click to add task and Close modal popup', () => {
+    it('Click to add task and Close modal popup', function(done){
         wrapperTaskFormModalPopup.find(TaskForm).find('.saveTaskBtn').simulate('click')
+        done();
     });
-    it('Click to add task and Close modal popup', function(done) {
-        this.timeout(5000);
-        setTimeout(function () {
-          const state = store.getState();
-            done();
-          //  console.log("state task === > \n\n " , state.tasks);
-          expect(state.tasks).to.not.be.undefined;
-        }, 5000);
-     });
   });
 
-  // describe('\n View task \n', () =>  {
-  //
-  //   // it('Get data from database', () => {
-  //   //     // expect(wrapperTaskPage.WrappedComponent).to.not.be.null
-  //   //     expect(fetchtasks.calledOnce).to.equal(true);
-  //   // });
-  //   // it('Set data to props of Taskpage ', () => {
-  //   //     wrapperTaskPage.setProps({ tasks: tasks });
-  //   //     expect(wrapperTaskPage.props().tasks).to.equal(tasks);
-  //   // });
-  //   it('Displaying tasks', function(done) {
-  //     this.timeout(15000);
-  //         setTimeout(function () {
-  //           const fetchtasks =  sinon.spy(TaskPage.prototype, 'componentDidMount');
-  //           const deletetask = sinon.spy();
-  //           wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
-  //           // console.log("store => ", store.tasks);
-  //             console.log(wrapperTaskPage.find(TasksList).html());
-  //             expect(wrapperTaskPage.find(TasksList).html()).to.not.equal("<div><p>There are no tasks yet in your collection.</p></div>");
-  //           done();
-  //
-  //
-  //     }, 6000);
-  //   });
-  // });
-}, 5000);
-
+  describe('\n View task \n', () =>  {
+      it('Displaying all tasks', function(done) {
+        const fetchtasks =  sinon.spy();
+        const deletetask = sinon.spy();
+        wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
+        setTimeout(function () {
+          expect(wrapperTaskPage.find(TasksList).html()).to.not.equal("<div><p>There are no tasks yet in your collection.</p></div>");
+        }, 3000);
+        done();
+      });
+      it('Displayed task - '+ taskTitle, function() {
+        setTimeout(function () {
+          let titleExists
+          const texts = wrapperTaskPage.find(TasksList).find(".panel-heading").map(node => titleExists = node.text() === taskTitle ? true : false );
+          expect(titleExists).to.equal(true);
+        }, 3000);
+      });
+  });
 });

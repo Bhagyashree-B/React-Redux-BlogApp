@@ -18,11 +18,9 @@ let task = mongoose.model('task', taskSchema);
 module.exports = task;
 
 module.exports.getListOfTasks = (root, {userId}) => {
-  return new Promise((resolve, reject) => {
-    task.find({ "userId" : userId}).exec((err, res) => {
-      err ? reject(err) : resolve(res);
-    });
-  });
+  return task.find({ "userId" : userId}).exec().then(res => {
+    return res
+  })
 };
 
 module.exports.getTaskById = (root, {id}) => {

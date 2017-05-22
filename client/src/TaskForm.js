@@ -6,10 +6,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './css/TaskCard.css';
 
 const categoryList = {
-  arts_entertainment : "Arts & Entertainment",
-  beauty_fitness : "Beauty & Fitness",
-  books_literature : "Books & Literature",
-  food_drink : "Food & Drink"
+  high : "High",
+  medium : "Medium",
+  low : "Low",
 }
 
 const statusList = {
@@ -39,23 +38,19 @@ class taskForm extends React.Component {
 
   updateTitleState = (e) => {
       this.setState({title: e.target.value});
-      console.log("        Update title => " + e.target.value )
    }
 
   updateDescriptionState = (e) => {
       this.setState({taskContent: e.target.value});
-      console.log("        Update taskContent => " + e.target.value )
    }
 
    handlestartDateChange = (date) => {
-     console.log("        Update startDate => " + e.target.value )
      this.setState({
        startDate: date
      });
    }
 
    handledueDateChange = (date) => {
-     console.log("        Update dueDate => " + e.target.value )
     this.setState({
       dueDate: date
     });
@@ -86,7 +81,6 @@ class taskForm extends React.Component {
 
     if (isValid) {
         const { title, status, category , startDate , dueDate , taskContent } = this.state;
-        console.log("In isValid");
         this.setState({ loading: true });
         this.props.savetask({ title, status, category, startDate , dueDate , taskContent  }).then(()=>{
           this.setState({ loading: false })
@@ -126,7 +120,7 @@ class taskForm extends React.Component {
             </select>
         </div>
         <div className={classnames('field', { error: !!this.state.errors.category})}>
-          <label htmlFor="category">Category</label>
+          <label htmlFor="category">Priority</label>
             <select name="category" className="form-control category" onChange={this.handleCategoryChange}>
               {categoryOptions}
             </select>

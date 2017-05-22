@@ -1,18 +1,12 @@
 import React, { Component } from 'react'
 
-// function setErrorMsg(error) {
-//   return {
-//     authError: error
-//   }
-// }
-
 export default class LoginForm extends Component {
     constructor(props) {
       super(props);
       this.state = {
         email: "",
         password :"",
-        authError: props.authError
+        authError: props.authError ? props.authError : {message : ""}
       }
       this.updateEmailState = this.updateEmailState.bind(this);
       this.updatePasswordState = this.updatePasswordState.bind(this);
@@ -20,18 +14,15 @@ export default class LoginForm extends Component {
    }
 
   componentWillReceiveProps ({authError}) {
-    this.setState({authError: authError})
+    if(authError)
+      this.setState({authError: authError})
   }
 
   handleSubmit() {
-    //e.preventDefault()
     try{
         const { email, password } = this.state;
-        console.log("        Updated state for username and password in handleSubmit => " + this.state.email + "  " + this.state.password )
         this.props.login({ email, password })
-    }catch(ex){
-        console.log(ex)
-    }
+    }catch(ex){ }
   }
 
   resetPassword = () => {
@@ -41,14 +32,11 @@ export default class LoginForm extends Component {
   }
 
   updateEmailState(e) {
-    // console.log(e.target.name)
       this.setState({email: e.target.value});
-      console.log("        Update state for username => " + e.target.value )
    }
 
   updatePasswordState(e) {
       this.setState({password: e.target.value});
-      console.log("        Update state for password => " + e.target.value )
    }
 
   render () {

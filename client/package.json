@@ -9,6 +9,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.11.6",
     "chai": "^3.5.0",
+    "cross-env": "^5.0.0",
     "enzyme": "^2.4.1",
     "jsdom": "^9.4.1",
     "mocha": "^3.0.0",
@@ -43,7 +44,14 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/*.spec.js --debug",
+    "test": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/*.spec.js --debug",
+    "test-login-form": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/a_loginForm.spec.js --debug",
+    "test-view-task": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/Login_AddTask_ViewTask.spec.js --debug",
+    "test-delete-task": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/Login_AddTask_DeleteTask.spec.js --debug",
+    "test-graph-ql": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/Login_Test_GraphQL.spec.js --debug",
+    "test-user-not-found": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/Login_User_Not_Found.spec.js --debug",
+    "test-wrong-password": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/Login_Wrong_Password.spec.js --debug",
+    "test-task-form": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/TaskForm.spec.js --debug",
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:8080"

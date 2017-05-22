@@ -11,10 +11,9 @@ const statusList = {
 }
 
 const categoryList = {
-  arts_entertainment : "Arts & Entertainment",
-  beauty_fitness : "Beauty & Fitness",
-  books_literature : "Books & Literature",
-  food_drink : "Food & Drink"
+  high : "High",
+  medium : "Medium",
+  low : "Low",
 }
 
 export default function taskCard({ task, deletetask }) {
@@ -31,7 +30,7 @@ export default function taskCard({ task, deletetask }) {
             <td>{ statusList[task.status] ? statusList[task.status] : "NA"}</td>
           </tr>
           <tr>
-            <td>Category : </td>
+            <td>Priority : </td>
             <td>{ categoryList[task.category] ? categoryList[task.category] : "other"}</td>
           </tr>
           <tr>
@@ -50,7 +49,7 @@ export default function taskCard({ task, deletetask }) {
       </div>
       <div>
         {/* <Link to={`/task/${task.id}`} className="ui basic button green panel-button">Edit</Link> */}
-        <div className="ui basic button panel-button red deleteTask" onClick={() => deletetask(task.id)}>Delete</div>
+        <button className="ui basic button panel-button red deleteTask" onClick={() => deletetask(task.id)}>Delete</button>
       </div>
     </Panel>
     </div>

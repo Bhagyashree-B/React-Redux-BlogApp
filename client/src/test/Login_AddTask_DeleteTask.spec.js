@@ -4,8 +4,9 @@ import { shallow, mount } from 'enzyme';
 import chai from 'chai';
 import TestUtils from 'react-addons-test-utils';
 import configureMockStore  from 'redux-mock-store';
-// import  {savetask}  from '../actions';
- import  user  from '../reducers/user';
+import glQuery from '../service/HttpGraphQl'
+import  {taskDeleted, deletetask}  from '../actions';
+import  user  from '../reducers/user';
 import  Login  from '../Login';
 import  LoginForm  from '../LoginForm';
 import  TaskFormModalPopup   from '../TaskFormModalPopup';
@@ -26,39 +27,20 @@ global.Assertion = chai.Assertion;
 global.expect = chai.expect;
 global.assert = chai.assert;
 
-
-describe('\n Login-AddTask-ViewTask \n ', () => {
+describe('\n Login-AddTask-DeleteTask \n ', () => {
   let wrapperData;
   let wrapperTaskForm
   let wrapperTaskFormModalPopup;
   let wrapperTaskPage;
   const loginHandleSubmit = sinon.spy();
   const login = sinon.spy();
-  const login1 = sinon.spy();
   const savetask = sinon.spy();
-//   const tasks = {
-// 	"tasks": [{
-// 		"_id": "59006deb5390dc1df4fe6d01",
-// 		"title": "tashdjksak",
-// 		"taskContent": "asdhjakshdjka"
-// 	}, {
-// 		"_id": "5903321518552a35c81c0db4",
-// 		"title": "test",
-// 		"taskContent": "test desc"
-// 	}, {
-// 		"_id": "5911c21e5a8f731ee8b47cd2",
-// 		"title": "Title from test",
-// 		"taskContent": "description from test "
-// 	}]
-// };
-
+  let userState;
   before(function() {
-    // runs before all tests in this block
     wrapperData = mount(<Login login={login} store={store}/>)
-    // wrapperTaskForm =  mount(<TaskForm savetask={savetask}  />)
   });
 
-  describe('\n Login \n', () => {
+  describe('\n  Login\n', () => {
     it('Add username', () => {
         wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'test'}});
         expect(wrapperData.find('input').find('.email').prop('value')).to.equal("test");
@@ -67,47 +49,39 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
         wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: '12345'}});
         expect(wrapperData.find('input').find('.password').prop('value')).to.equal("12345");
     });
-    it('Click to login', function(done) {
+    it('Login successfull', function(done) {
       wrapperData.find('.loginbtn').simulate('click')
-      // sinon.assert.called(loginHandleSubmit)
-       done();
+       setTimeout(function () {
+         const state = store.getState();
+         expect(state.user.isAuthenticated).to.equal(true)
+         done();
+       }, 3000);
     });
-    it('Give token from api response', function(done) {
-        this.timeout(5000);
-        setTimeout(function () {
-          const state = store.getState();
-            expect(state.tasks).to.not.be.undefined;
-            done();
-          //  console.log("state task === > \n\n " , state.tasks);
-        }, 5000);
-     });
-    it('add user auth token to local storage', () => {
-      const state = JSON.stringify(store.getState().user);
+    it('Add user auth token to local storage', () => {
+      const stateUser = JSON.stringify(store.getState().user);
       const spy = sinon.spy(global.window.localStorage, "setItem");
-      spy(state);
+      spy(stateUser);
       expect(spy.calledWith( {
-        state
+        stateUser
       }));
       spy.restore();
-
       // const stub = sinon.stub(global.window.localStorage, 'getItem');
-      // stub(state);
-      // expect(stub.calledWith(Object.keys(state)));
+      // stub(stateUser);
+      // expect(stub.calledWith(Object.keys(stateUser)));
       // stub.restore();
     });
   });
 
-setTimeout(function() {
-
   describe('\n Add task \n' , () => {
-    wrapperTaskFormModalPopup = mount(<TaskFormModalPopup savetask={savetask} store={store}  />)
-
-    it('Open modal popup', () => {
-        console.log(wrapperTaskFormModalPopup.html());
+    it('Open New task window', function(done) {
+      wrapperTaskFormModalPopup = mount(<TaskFormModalPopup savetask={savetask} store={store}  />)
+      done();
+    });
+    it('Open modal popup', function() {
         wrapperTaskFormModalPopup.find('.modalBtn').simulate('click')
     });
     it('Add title', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: 'title Loreum ipsum'}});
+        wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: 'books_literature'}});
         expect(wrapperTaskFormModalPopup.find('input').find('.title').prop('value')).to.not.equal(null);
     });
     it('Add start date', () => {
@@ -119,7 +93,7 @@ setTimeout(function() {
         expect(wrapperTaskFormModalPopup.find('input').find('.startDate').prop('value')).to.not.equal(null);
     });
     it('Add task description', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'description Loreum ipsum'}});
+        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'books_literature'}});
         expect(wrapperTaskFormModalPopup.find('input').find('.taskContent').prop('value')).to.not.equal(null);
     });
     it('Add task status', () => {
@@ -127,44 +101,30 @@ setTimeout(function() {
         expect(wrapperTaskFormModalPopup.find('select.status').find('option')).to.not.equal(null);
     });
     it('Add task category', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'food_drink'}});
+        wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'books_literature'}});
         expect(wrapperTaskFormModalPopup.find('select.category').find('option')).to.not.equal(null);
     });
-    it('Click to add task and Close modal popup', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.saveTaskBtn').simulate('click')
+    it('Click to add task and Close modal popup', function(done){
+      userState = store.getState().user;
+      wrapperTaskFormModalPopup.find(TaskForm).find('.saveTaskBtn').simulate('click')
+      done();
     });
-    it('Click to add task and Close modal popup', function(done) {
-        this.timeout(5000);
-        setTimeout(function () {
-          const state = store.getState();
-            done();
-          //  console.log("state task === > \n\n " , state.tasks);
-          expect(state.tasks).to.not.be.undefined;
-        }, 5000);
-     });
   });
 
-  describe('\n Delete task \n', () =>  {
-
-    // it('Get data from database', () => {
-    //     // expect(wrapperTaskPage.WrappedComponent).to.not.be.null
-    //     expect(fetchtasks.calledOnce).to.equal(true);
-    // });
-    // it('Set data to props of Taskpage ', () => {
-    //     wrapperTaskPage.setProps({ tasks: tasks });
-    //     expect(wrapperTaskPage.props().tasks).to.equal(tasks);
-    // });
-    it.skip('Delete tasks', function(done) {
-      this.timeout(15000);
+    describe('\n Delete task \n', () =>  {
+      it('Delete task', function(done) {
+          const fetchtasks =  sinon.spy(TaskPage.prototype, 'componentDidMount');
+          const deletetask = sinon.stub();
+          wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
+          done();
           setTimeout(function () {
-            const fetchtasks =  sinon.spy(TaskPage.prototype, 'componentDidMount');
-            const deletetask = sinon.spy();
-            wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
-            wrapperTaskPage.find(TaskForm).find('.deleteTask').simulate('click')
-            done();
-      }, 6000);
+            let {tasks} = store.getState()
+            wrapperTaskPage.find('button.deleteTask').last().simulate('click')
+            setTimeout(function () {
+              const tasksLength = store.getState().tasks
+              expect(tasks.length).to.equal(tasksLength.length + 1)
+            }, 1000);
+        }, 2000);
+      });
     });
-  });
-}, 5000);
-
 });
