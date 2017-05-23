@@ -183,7 +183,7 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
           const texts = wrapperTaskPage.find(TasksList).find(".panel-heading").map(node => titleExists = node.text() === taskTitle ? true : false );
           expect(titleExists).to.equal(true);
           done();
-        }, 10);
+        }, 40);
       });
   });
 

@@ -46,7 +46,7 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
   const logoutUser = sinon.spy();
   let userState;
   before(function(done) {
-    setTimeout(()=>{ done(); },50);
+    setTimeout(()=>{ done(); },500);
     wrapperData = mount(<Login login={login} store={store}/>)
   });
 
