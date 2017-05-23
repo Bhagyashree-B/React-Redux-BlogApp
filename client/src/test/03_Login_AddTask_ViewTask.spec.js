@@ -4,11 +4,9 @@ import { shallow, mount } from 'enzyme';
 import chai from 'chai';
 import TestUtils from 'react-addons-test-utils';
 import configureMockStore  from 'redux-mock-store';
-import glQuery from '../service/HttpGraphQl'
-import  {taskDeleted, deletetask}  from '../actions';
-import  user  from '../reducers/user';
+// import  {savetask}  from '../actions';
+ import  user  from '../reducers/user';
 import  Login  from '../Login';
-import  App  from '../App';
 import  LoginForm  from '../LoginForm';
 import  TaskFormModalPopup   from '../TaskFormModalPopup';
 import  Modal   from '../TaskFormModalPopup';
@@ -27,46 +25,83 @@ global.AssertionError = chai.AssertionError;
 global.Assertion = chai.Assertion;
 global.expect = chai.expect;
 global.assert = chai.assert;
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-export const LOGOUT = 'LOGOUT';
-export function logout() {
-   return {
-      type: LOGOUT
-   }
-}
-
-describe('\n Login-AddTask-DeleteTask \n ', () => {
+describe('\n Login-AddTask-ViewTask \n ', () => {
+  let taskTitle = "Get milk"
   let wrapperData;
   let wrapperTaskForm
   let wrapperTaskFormModalPopup;
   let wrapperTaskPage;
   const loginHandleSubmit = sinon.spy();
   const login = sinon.spy();
+  const login1 = sinon.spy();
   const savetask = sinon.spy();
-  const logoutUser = sinon.spy();
-  let userState;
+//   const tasks = {
+// 	"tasks": [{
+// 		"_id": "59006deb5390dc1df4fe6d01",
+// 		"title": "tashdjksak",
+// 		"taskContent": "asdhjakshdjka"
+// 	}, {
+// 		"_id": "5903321518552a35c81c0db4",
+// 		"title": "test",
+// 		"taskContent": "test desc"
+// 	}, {
+// 		"_id": "5911c21e5a8f731ee8b47cd2",
+// 		"title": "Title from test",
+// 		"taskContent": "description from test "
+// 	}]
+// };
+
   before(function() {
+    // setTimeout(()=>{ done(); },60);
+    // runs before all tests in this block
     wrapperData = mount(<Login login={login} store={store}/>)
+    // wrapperTaskForm =  mount(<TaskForm savetask={savetask}  />)
   });
 
   describe('\n   Login \n', () => {
-    it('Add username', () => {
+    it('Add username - test', () => {
         wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'test'}});
         expect(wrapperData.find('input').find('.email').prop('value')).to.equal("test");
     });
-    it('Add password', () => {
+    it('Add password - 12345', () => {
         wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: '12345'}});
         expect(wrapperData.find('input').find('.password').prop('value')).to.equal("12345");
     });
     it('Login successfull', function(done) {
-      this.timeout(100);
-      wrapperData.find('.loginbtn').simulate('click')
+      // if(!store.getState().user.isAuthenticated)
+       wrapperData.find('.loginbtn').simulate('click')
        setTimeout(function () {
          const state = store.getState();
-         expect(state.user.isAuthenticated).to.equal(true)
+         if(state.user)
+          expect(state.user.isAuthenticated).to.equal(true)
+        else
+          expect(true).to.equal(false)
          done();
-       }, 30);
+       }, 20);
     });
+    // it('Login successfull', function() {
+    //    setTimeout(function () {
+    //      const state = store.getState();
+    //      expect(state.user.isAuthenticated).to.equal(true)
+    //    }, 3000);
+    // });
+
+    // it('Check if : Authentication failed. User not found.', function() {
+    //   setTimeout(function () {
+    //     expect(wrapperData.find("div.alert-danger").find(".error-message").html())
+    //       .to.not.equal('<span class="error-message">Authentication failed. User not found.</span>')
+    //   }, 5000);
+    // });
+
+    // it('Check if : Authentication failed. Wrong password.', function() {
+    //   setTimeout(function () {
+    //     expect(wrapperData.find("div.alert-danger").find(".error-message").html())
+    //       .to.not.equal('<span class="error-message">Authentication failed. Wrong password.</span>')
+    //   }, 5000);
+    // });
+
     it('Add user auth token to local storage', () => {
       const stateUser = JSON.stringify(store.getState().user);
       const spy = sinon.spy(global.window.localStorage, "setItem");
@@ -82,6 +117,7 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
     });
   });
 
+// setTimeout(function() {
   describe('\n   Add task \n' , () => {
     it('Open New task window', function(done) {
       wrapperTaskFormModalPopup = mount(<TaskFormModalPopup savetask={savetask} store={store}  />)
@@ -89,9 +125,10 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
     });
     it('Open modal popup', function() {
         wrapperTaskFormModalPopup.find('.modalBtn').simulate('click')
+        // expect(wrapperTaskFormModalPopup.state().showModal).to.equal(true)
     });
-    it('Add title - Get some cookies', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: 'Get some cookies'}});
+    it('Add title - ' + taskTitle, () => {
+        wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: taskTitle}});
         expect(wrapperTaskFormModalPopup.find('input').find('.title').prop('value')).to.not.equal(null);
     });
     it('Add start date', () => {
@@ -103,47 +140,42 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
         expect(wrapperTaskFormModalPopup.find('input').find('.startDate').prop('value')).to.not.equal(null);
     });
     it('Add task description', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'milk'}});
+        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'tt'}});
         expect(wrapperTaskFormModalPopup.find('input').find('.taskContent').prop('value')).to.not.equal(null);
     });
-    it('Add task status', () => {
+      it('Add task status', () => {
         wrapperTaskFormModalPopup.find(TaskForm).find('.status').simulate('change', {target: {value: 'inprogress'}});
         expect(wrapperTaskFormModalPopup.find('select.status').find('option')).to.not.equal(null);
     });
     it('Add task category', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'high'}});
+        wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'food_drink'}});
         expect(wrapperTaskFormModalPopup.find('select.category').find('option')).to.not.equal(null);
     });
     it('Click to add task and Close modal popup', function(done){
-      userState = store.getState().user;
-      wrapperTaskFormModalPopup.find(TaskForm).find('.saveTaskBtn').simulate('click')
-      done();
+        wrapperTaskFormModalPopup.find(TaskForm).find('.saveTaskBtn').simulate('click')
+        done();
     });
   });
 
-    describe('\n   Delete task \n', () =>  {
-      it('Delete task - Get some cookies', function(done) {
-          const fetchtasks =  sinon.spy();
-          const deletetask = sinon.stub();
-          wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
-          setTimeout(function () {
-            let {tasks} = store.getState()
-            wrapperTaskPage.find('button.deleteTask').last().simulate('click')
-            setTimeout(function () {
-              const tasksLength = store.getState().tasks
-              expect(tasks.length).to.equal(tasksLength.length + 1)
-              done();
-            }, 60);
-        }, 60);
+  describe('\n   View task \n', () =>  {
+      it('Displaying all tasks', function(done) {
+        this.timeout(150);
+        const fetchtasks =  sinon.spy();
+        const deletetask = sinon.spy();
+        wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
+        setTimeout(function () {
+          expect(wrapperTaskPage.find(TasksList).html()).to.not.equal("<div><p>There are no tasks yet in your collection.</p></div>");
+          done();
+        }, 10);
       });
-    });
-
-    // after(function(done) {
-    //   store.dispatch(logout())
-    //   // wrapperData.unmount();
-    //   // wrapperTaskFormModalPopup.unmount();
-    //   // wrapperTaskPage.unmount();
-    //   console.log("after all------------------")
-    //   done();
-    // });
+      it('Displayed task - '+ taskTitle, function(done) {
+        this.timeout(150);
+        setTimeout(function () {
+          let titleExists
+          const texts = wrapperTaskPage.find(TasksList).find(".panel-heading").map(node => titleExists = node.text() === taskTitle ? true : false );
+          expect(titleExists).to.equal(true);
+          done();
+        }, 10);
+      });
+  });
 });

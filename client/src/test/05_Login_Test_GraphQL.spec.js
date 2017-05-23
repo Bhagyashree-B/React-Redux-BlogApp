@@ -27,7 +27,7 @@ global.expect = chai.expect;
 global.assert = chai.assert;
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-describe('\n Login-Get-Tasks \n ', () => {
+describe('\n Login-Get-Tasks (API) \n ', () => {
   let wrapperData;
   let wrapperTaskForm
   let wrapperTaskFormModalPopup;
@@ -39,7 +39,7 @@ describe('\n Login-Get-Tasks \n ', () => {
 
 
   before(function(done) {
-    setTimeout(()=>{ done(); },50);
+    setTimeout(()=>{ done(); },60);
     // runs before all tests in this block
     wrapperData = mount(<Login login={login} store={store}/>)
     // wrapperTaskForm =  mount(<TaskForm savetask={savetask}  />)
