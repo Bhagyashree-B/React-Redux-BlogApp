@@ -38,13 +38,14 @@ describe('\n Login-Get-Tasks \n ', () => {
   const savetask = sinon.spy();
 
 
-  before(function() {
+  before(function(done) {
+    setTimeout(()=>{ done(); },50);
     // runs before all tests in this block
     wrapperData = mount(<Login login={login} store={store}/>)
     // wrapperTaskForm =  mount(<TaskForm savetask={savetask}  />)
   });
 
-  describe('\n Login \n', () => {
+  describe('\n   Login \n', () => {
     it('Add username - test2', () => {
         wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'test2'}});
         expect(wrapperData.find('input').find('.email').prop('value')).to.equal("test2");
@@ -53,10 +54,11 @@ describe('\n Login-Get-Tasks \n ', () => {
         wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: '12345'}});
         expect(wrapperData.find('input').find('.password').prop('value')).to.equal("12345");
     });
-    it('Click on login', function() {
-      wrapperData.find('.loginbtn').simulate('click')
-      expect(true).to.equal(true)
-    //    done();
+    it('Click on login', function(done) {
+        this.timeout(50);
+        wrapperData.find('.loginbtn').simulate('click')
+        expect(true).to.equal(true)
+        done();
     //    setTimeout(function () {
     //      const state = store.getState();
     //      expect(state.user.isAuthenticated).to.equal(true)
@@ -64,13 +66,12 @@ describe('\n Login-Get-Tasks \n ', () => {
     });
   });
 
-  describe('\n Get Tasks (API) \n' , () => {
+  describe('\n   Get Tasks (API) \n' , () => {
     it('Retrieve all tasks', function(done) {
-            this.timeout(5000);
+            this.timeout(300);
             setTimeout(function () {
             const state = store.getState();
                 expect(state.tasks).to.not.be.undefined;
-                done();
                 let user = state.user
                 // let payload = '{ tasks( userId : "'+ user._id +'") { id, userId, status, title, category, startDate , dueDate , taskContent}}'
                 let payload = '{ chartByCategory( userId : "'+ user._id +'", statusValue : "inprogress" ) { dataBycategory { total, data {status, count} } , allData { count, userName} } }'
@@ -90,9 +91,9 @@ describe('\n Login-Get-Tasks \n ', () => {
                 //console.log("Inside then ---------------->" +res)              
                 let rs = JSON.parse(res)
                 expect(rs.hasOwnProperty('data')).to.equal(true)
+                done();
                 })
-        
-        }, 2000);
+        }, 30);
         });
     })
 })

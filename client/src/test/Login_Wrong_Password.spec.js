@@ -44,7 +44,7 @@ describe('\n Login-Wrong-Password \n ', () => {
     // wrapperTaskForm =  mount(<TaskForm savetask={savetask}  />)
   });
 
-  describe('\n Login \n', () => {
+  describe('\n   Login \n', () => {
     it('Add username - test', () => {
         wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'test'}});
         expect(wrapperData.find('input').find('.email').prop('value')).to.equal("test");
@@ -68,7 +68,7 @@ describe('\n Login-Wrong-Password \n ', () => {
         expect(wrapperData.find("div.alert-danger").find(".error-message").html())
           .to.equal('<span class="error-message">Authentication failed. Wrong password.</span>')
         done();
-      }, 3000);
+      }, 10);
     });
   });
 })

@@ -44,7 +44,7 @@ describe('\n Login-User-Not-Found \n ', () => {
     // wrapperTaskForm =  mount(<TaskForm savetask={savetask}  />)
   });
 
-  describe('\n Login \n', () => {
+  describe('\n   Login \n', () => {
     it('Add username - xyz', () => {
         wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'xyz'}});
         expect(wrapperData.find('input').find('.email').prop('value')).to.equal("xyz");
@@ -68,7 +68,7 @@ describe('\n Login-User-Not-Found \n ', () => {
         expect(wrapperData.find("div.alert-danger").find(".error-message").html())
           .to.equal('<span class="error-message">Authentication failed. User not found.</span>')
         done();
-      }, 3000);
+      }, 10);
     });
   });
 })

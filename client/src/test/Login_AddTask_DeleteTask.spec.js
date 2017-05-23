@@ -8,6 +8,7 @@ import glQuery from '../service/HttpGraphQl'
 import  {taskDeleted, deletetask}  from '../actions';
 import  user  from '../reducers/user';
 import  Login  from '../Login';
+import  App  from '../App';
 import  LoginForm  from '../LoginForm';
 import  TaskFormModalPopup   from '../TaskFormModalPopup';
 import  Modal   from '../TaskFormModalPopup';
@@ -27,6 +28,13 @@ global.Assertion = chai.Assertion;
 global.expect = chai.expect;
 global.assert = chai.assert;
 
+export const LOGOUT = 'LOGOUT';
+export function logout() {
+   return {
+      type: LOGOUT
+   }
+}
+
 describe('\n Login-AddTask-DeleteTask \n ', () => {
   let wrapperData;
   let wrapperTaskForm
@@ -35,12 +43,13 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
   const loginHandleSubmit = sinon.spy();
   const login = sinon.spy();
   const savetask = sinon.spy();
+  const logoutUser = sinon.spy();
   let userState;
   before(function() {
     wrapperData = mount(<Login login={login} store={store}/>)
   });
 
-  describe('\n  Login\n', () => {
+  describe('\n   Login \n', () => {
     it('Add username', () => {
         wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'test'}});
         expect(wrapperData.find('input').find('.email').prop('value')).to.equal("test");
@@ -50,12 +59,13 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
         expect(wrapperData.find('input').find('.password').prop('value')).to.equal("12345");
     });
     it('Login successfull', function(done) {
+      this.timeout(100);
       wrapperData.find('.loginbtn').simulate('click')
        setTimeout(function () {
          const state = store.getState();
          expect(state.user.isAuthenticated).to.equal(true)
          done();
-       }, 3000);
+       }, 30);
     });
     it('Add user auth token to local storage', () => {
       const stateUser = JSON.stringify(store.getState().user);
@@ -72,7 +82,7 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
     });
   });
 
-  describe('\n Add task \n' , () => {
+  describe('\n   Add task \n' , () => {
     it('Open New task window', function(done) {
       wrapperTaskFormModalPopup = mount(<TaskFormModalPopup savetask={savetask} store={store}  />)
       done();
@@ -80,8 +90,8 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
     it('Open modal popup', function() {
         wrapperTaskFormModalPopup.find('.modalBtn').simulate('click')
     });
-    it('Add title', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: 'books_literature'}});
+    it('Add title - Get some cookies', () => {
+        wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: 'Get some cookies'}});
         expect(wrapperTaskFormModalPopup.find('input').find('.title').prop('value')).to.not.equal(null);
     });
     it('Add start date', () => {
@@ -93,7 +103,7 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
         expect(wrapperTaskFormModalPopup.find('input').find('.startDate').prop('value')).to.not.equal(null);
     });
     it('Add task description', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'books_literature'}});
+        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'milk'}});
         expect(wrapperTaskFormModalPopup.find('input').find('.taskContent').prop('value')).to.not.equal(null);
     });
     it('Add task status', () => {
@@ -101,7 +111,7 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
         expect(wrapperTaskFormModalPopup.find('select.status').find('option')).to.not.equal(null);
     });
     it('Add task category', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'books_literature'}});
+        wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'high'}});
         expect(wrapperTaskFormModalPopup.find('select.category').find('option')).to.not.equal(null);
     });
     it('Click to add task and Close modal popup', function(done){
@@ -111,20 +121,29 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
     });
   });
 
-    describe('\n Delete task \n', () =>  {
-      it('Delete task', function(done) {
-          const fetchtasks =  sinon.spy(TaskPage.prototype, 'componentDidMount');
+    describe('\n   Delete task \n', () =>  {
+      it('Delete task - Get some cookies', function(done) {
+          const fetchtasks =  sinon.spy();
           const deletetask = sinon.stub();
           wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
-          done();
           setTimeout(function () {
             let {tasks} = store.getState()
             wrapperTaskPage.find('button.deleteTask').last().simulate('click')
             setTimeout(function () {
               const tasksLength = store.getState().tasks
               expect(tasks.length).to.equal(tasksLength.length + 1)
-            }, 1000);
-        }, 2000);
+              done();
+            }, 60);
+        }, 60);
       });
     });
+
+    // after(function(done) {
+    //   store.dispatch(logout())
+    //   // wrapperData.unmount();
+    //   // wrapperTaskFormModalPopup.unmount();
+    //   // wrapperTaskPage.unmount();
+    //   console.log("after all------------------")
+    //   done();
+    // });
 });
