@@ -27,6 +27,13 @@ global.expect = chai.expect;
 global.assert = chai.assert;
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
+export const LOGOUT = 'LOGOUT';
+export function logout() {
+   return {
+      type: LOGOUT
+   }
+}
+
 describe('\n Login-AddTask-ViewTask \n ', () => {
   let taskTitle = "Get milk"
   let wrapperData;
@@ -37,6 +44,7 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
   const login = sinon.spy();
   const login1 = sinon.spy();
   const savetask = sinon.spy();
+  const logoutUser = sinon.spy();
 //   const tasks = {
 // 	"tasks": [{
 // 		"_id": "59006deb5390dc1df4fe6d01",
@@ -177,5 +185,10 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
           done();
         }, 10);
       });
+  });
+
+  after(function(done) {
+    store.dispatch(logout())
+    done();
   });
 });
