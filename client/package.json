@@ -39,7 +39,8 @@
     "react-router-dom": "4.0.0",
     "redux": "3.6.0",
     "redux-devtools-extension": "1.0.0",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "xmlhttprequest": "1.8.0"
   },
   "scripts": {
     "start": "react-scripts start",
