@@ -36,7 +36,8 @@ describe('\n Login-User-Not-Found \n ', () => {
   const login = sinon.spy();
   const login1 = sinon.spy();
   const savetask = sinon.spy();
-
+  const email = "john1@gmail.com"
+  const password = "john123"
 
   before(function() {
     // runs before all tests in this block
@@ -45,13 +46,13 @@ describe('\n Login-User-Not-Found \n ', () => {
   });
 
   describe('\n   Login \n', () => {
-    it('Add username - xyz', () => {
-        wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'xyz'}});
-        expect(wrapperData.find('input').find('.email').prop('value')).to.equal("xyz");
+    it('Add email - '+email, () => {
+        wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: email}});
+        expect(wrapperData.find('input').find('.email').prop('value')).to.equal(email);
     });
-    it('Add password - 12345', () => {
-        wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: '12345'}});
-        expect(wrapperData.find('input').find('.password').prop('value')).to.equal("12345");
+    it('Add password - '+password, () => {
+        wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: password}});
+        expect(wrapperData.find('input').find('.password').prop('value')).to.equal(password);
     });
     it('Click on login', function() {
       wrapperData.find('.loginbtn').simulate('click')
@@ -68,7 +69,7 @@ describe('\n Login-User-Not-Found \n ', () => {
         expect(wrapperData.find("div.alert-danger").find(".error-message").html())
           .to.equal('<span class="error-message">Authentication failed. User not found.</span>')
         done();
-      }, 10);
+      }, 30);
     });
   });
 })

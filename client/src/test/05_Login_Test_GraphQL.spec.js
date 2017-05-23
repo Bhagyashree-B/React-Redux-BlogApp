@@ -36,6 +36,8 @@ describe('\n Login-Get-Tasks (API) \n ', () => {
   const login = sinon.spy();
   const login1 = sinon.spy();
   const savetask = sinon.spy();
+  const email = "john@gmail.com"
+  const password = "john123"
 
 
   before(function(done) {
@@ -46,13 +48,13 @@ describe('\n Login-Get-Tasks (API) \n ', () => {
   });
 
   describe('\n   Login \n', () => {
-    it('Add username - test2', () => {
-        wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'test2'}});
-        expect(wrapperData.find('input').find('.email').prop('value')).to.equal("test2");
+    it('Add email - '+email, () => {
+        wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: email}});
+        expect(wrapperData.find('input').find('.email').prop('value')).to.equal(email);
     });
-    it('Add password - 12345', () => {
-        wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: '12345'}});
-        expect(wrapperData.find('input').find('.password').prop('value')).to.equal("12345");
+    it('Add password - '+password, () => {
+        wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: password}});
+        expect(wrapperData.find('input').find('.password').prop('value')).to.equal(password);
     });
     it('Click on login', function(done) {
         this.timeout(50);

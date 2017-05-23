@@ -40,24 +40,28 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
   let wrapperTaskForm
   let wrapperTaskFormModalPopup;
   let wrapperTaskPage;
+  let userState;
   const loginHandleSubmit = sinon.spy();
   const login = sinon.spy();
   const savetask = sinon.spy();
   const logoutUser = sinon.spy();
-  let userState;
+  const email = "john@gmail.com"
+  const password = "john123"
+  
+
   before(function(done) {
     setTimeout(()=>{ done(); },500);
     wrapperData = mount(<Login login={login} store={store}/>)
   });
 
   describe('\n   Login \n', () => {
-    it('Add username', () => {
-        wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'test'}});
-        expect(wrapperData.find('input').find('.email').prop('value')).to.equal("test");
+    it('Add email - '+email, () => {
+        wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: email}});
+        expect(wrapperData.find('input').find('.email').prop('value')).to.equal(email);
     });
-    it('Add password', () => {
-        wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: '12345'}});
-        expect(wrapperData.find('input').find('.password').prop('value')).to.equal("12345");
+    it('Add password - '+password, () => {
+        wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: password}});
+        expect(wrapperData.find('input').find('.password').prop('value')).to.equal(password);
     });
     it('Login successfull', function(done) {
       this.timeout(100);

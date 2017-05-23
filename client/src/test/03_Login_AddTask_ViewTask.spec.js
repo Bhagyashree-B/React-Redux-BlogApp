@@ -45,37 +45,23 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
   const login1 = sinon.spy();
   const savetask = sinon.spy();
   const logoutUser = sinon.spy();
-//   const tasks = {
-// 	"tasks": [{
-// 		"_id": "59006deb5390dc1df4fe6d01",
-// 		"title": "tashdjksak",
-// 		"taskContent": "asdhjakshdjka"
-// 	}, {
-// 		"_id": "5903321518552a35c81c0db4",
-// 		"title": "test",
-// 		"taskContent": "test desc"
-// 	}, {
-// 		"_id": "5911c21e5a8f731ee8b47cd2",
-// 		"title": "Title from test",
-// 		"taskContent": "description from test "
-// 	}]
-// };
+  const email = "john@gmail.com"
+  const password = "john123"
 
   before(function() {
-    // setTimeout(()=>{ done(); },60);
-    // runs before all tests in this block
+    
     wrapperData = mount(<Login login={login} store={store}/>)
     // wrapperTaskForm =  mount(<TaskForm savetask={savetask}  />)
   });
 
   describe('\n   Login \n', () => {
-    it('Add username - test', () => {
-        wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: 'test'}});
-        expect(wrapperData.find('input').find('.email').prop('value')).to.equal("test");
+    it('Add email - '+email, () => {
+        wrapperData.find(LoginForm).find('.email').simulate('change', {target: {value: email}});
+        expect(wrapperData.find('input').find('.email').prop('value')).to.equal(email);
     });
-    it('Add password - 12345', () => {
-        wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: '12345'}});
-        expect(wrapperData.find('input').find('.password').prop('value')).to.equal("12345");
+    it('Add password - '+password, () => {
+        wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: password}});
+        expect(wrapperData.find('input').find('.password').prop('value')).to.equal(password);
     });
     it('Login successfull', function(done) {
       // if(!store.getState().user.isAuthenticated)
@@ -89,26 +75,6 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
          done();
        }, 20);
     });
-    // it('Login successfull', function() {
-    //    setTimeout(function () {
-    //      const state = store.getState();
-    //      expect(state.user.isAuthenticated).to.equal(true)
-    //    }, 3000);
-    // });
-
-    // it('Check if : Authentication failed. User not found.', function() {
-    //   setTimeout(function () {
-    //     expect(wrapperData.find("div.alert-danger").find(".error-message").html())
-    //       .to.not.equal('<span class="error-message">Authentication failed. User not found.</span>')
-    //   }, 5000);
-    // });
-
-    // it('Check if : Authentication failed. Wrong password.', function() {
-    //   setTimeout(function () {
-    //     expect(wrapperData.find("div.alert-danger").find(".error-message").html())
-    //       .to.not.equal('<span class="error-message">Authentication failed. Wrong password.</span>')
-    //   }, 5000);
-    // });
 
     it('Add user auth token to local storage', () => {
       const stateUser = JSON.stringify(store.getState().user);
@@ -118,14 +84,11 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
         stateUser
       }));
       spy.restore();
-      // const stub = sinon.stub(global.window.localStorage, 'getItem');
-      // stub(stateUser);
-      // expect(stub.calledWith(Object.keys(stateUser)));
-      // stub.restore();
+      
     });
   });
 
-// setTimeout(function() {
+
   describe('\n   Add task \n' , () => {
     it('Open New task window', function(done) {
       wrapperTaskFormModalPopup = mount(<TaskFormModalPopup savetask={savetask} store={store}  />)
@@ -133,7 +96,7 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
     });
     it('Open modal popup', function() {
         wrapperTaskFormModalPopup.find('.modalBtn').simulate('click')
-        // expect(wrapperTaskFormModalPopup.state().showModal).to.equal(true)
+        
     });
     it('Add title - ' + taskTitle, () => {
         wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: taskTitle}});
@@ -174,7 +137,7 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
         setTimeout(function () {
           expect(wrapperTaskPage.find(TasksList).html()).to.not.equal("<div><p>There are no tasks yet in your collection.</p></div>");
           done();
-        }, 10);
+        }, 30);
       });
       it('Displayed task - '+ taskTitle, function(done) {
         this.timeout(150);
