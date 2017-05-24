@@ -35,7 +35,6 @@ export function logout() {
    }
 }
 
-
 /**
   Usecase for on successful login add task and then delete task
 **/
@@ -143,11 +142,11 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
               const tasksLength = store.getState().tasks
               expect(tasks.length).to.equal(tasksLength.length + 1)
               done();
-            }, 80);
-        }, 100);
+            }, 100);
+        }, 150);
       });
     });
-
+    
     // after(function(done) {
     //   store.dispatch(logout())
     //   // wrapperData.unmount();

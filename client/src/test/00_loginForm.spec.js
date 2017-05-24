@@ -15,8 +15,8 @@ import sinon from 'sinon';
 describe('\n Login-Page-Validations \n ', function () {
 var passwordData = "@123Password"
 var emailData = "email@sss.cpm"
-var badPasswordData = "johngmail.com"
-var badEmailData = "john123"
+var badPasswordData = "john123"
+var badEmailData = "johngmail.com"
 
  it('Page is rendered correctly', () => {
    const wrapper = shallow(<Login/>);
