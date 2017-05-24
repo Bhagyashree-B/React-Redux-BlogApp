@@ -53,6 +53,7 @@
     "test-user-not-found": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/Login_User_Not_Found.spec.js --debug",
     "test-wrong-password": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/Login_Wrong_Password.spec.js --debug",
     "test-task-form": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/TaskForm.spec.js --debug",
+    "test-dashboard-link": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/Dashboard.spec.js --debug",
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:8080"

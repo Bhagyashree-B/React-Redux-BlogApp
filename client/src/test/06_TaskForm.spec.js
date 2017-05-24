@@ -5,10 +5,13 @@ import  TaskForm  from '../TaskForm';
 import sinon from 'sinon';
 import moment from 'moment';
 
-describe('\n TaskForm-Validation \n ', function () {
+/**
+  Includes tests for add task form UI component
+**/
 
-var passwordData = "password"
-var emailData = "email@sss.cpm"
+describe('\n TaskForm-Validation \n ', function () {
+  var passwordData = "password"
+  var emailData = "email@sss.cpm"
 
  it('Page is rendered correctly', () => {
    const wrapper = shallow(<TaskForm/>);
@@ -60,6 +63,4 @@ var emailData = "email@sss.cpm"
     wrapper.setState({ category : "food_drink" });
     expect(wrapper.state().category).to.equal("food_drink");
   });
-
-
 });

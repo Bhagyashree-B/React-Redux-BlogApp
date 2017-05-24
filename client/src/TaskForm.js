@@ -17,6 +17,9 @@ const statusList = {
   completed : "Completed"
 }
 
+/**
+  taskForm consist of UI for Add task modal popup.
+**/
 class taskForm extends React.Component {
   componentWillMount() {
     this.resetStateData()

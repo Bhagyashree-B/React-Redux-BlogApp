@@ -18,6 +18,9 @@ export default class LoginForm extends Component {
       this.setState({authError: authError})
   }
 
+  /**
+    handleSubmit a callback with login method which passes parameters to the container component
+  **/
   handleSubmit() {
     try{
         const { email, password } = this.state;

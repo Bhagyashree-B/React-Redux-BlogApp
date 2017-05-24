@@ -2,6 +2,10 @@ import React from 'react';
 import TaskCard from './TaskCard';
 import './css/App.css'
 
+/**
+  TasksList function takes the all tasks from the parent and map it with TaskCard 
+  component
+**/
 export default function TasksList({ tasks = [], deletetask }) {
   const emptyMessage = (
     <p>There are no tasks yet in your collection.</p>

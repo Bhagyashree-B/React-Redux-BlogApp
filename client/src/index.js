@@ -9,13 +9,6 @@ import './index.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import store from './store/createStore';
 
-// const store = createStore(
-//   rootReducer,
-//   composeWithDevTools(
-//     applyMiddleware(thunk)
-//   )
-// );
-
 ReactDOM.render(
   <Provider store={store}>
     <App />

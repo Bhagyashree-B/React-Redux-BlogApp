@@ -35,6 +35,11 @@ export function logout() {
    }
 }
 
+
+/**
+  Usecase for on successful login add task and then delete task
+**/
+
 describe('\n Login-AddTask-DeleteTask \n ', () => {
   let wrapperData;
   let wrapperTaskForm
@@ -47,7 +52,7 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
   const logoutUser = sinon.spy();
   const email = "john@gmail.com"
   const password = "john123"
-  
+
 
   before(function(done) {
     setTimeout(()=>{ done(); },500);
@@ -139,7 +144,7 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
               expect(tasks.length).to.equal(tasksLength.length + 1)
               done();
             }, 80);
-        }, 80);
+        }, 100);
       });
     });
 

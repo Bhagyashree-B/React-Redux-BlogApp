@@ -4,8 +4,7 @@ import { shallow, mount } from 'enzyme';
 import chai from 'chai';
 import TestUtils from 'react-addons-test-utils';
 import configureMockStore  from 'redux-mock-store';
-// import  {savetask}  from '../actions';
- import  user  from '../reducers/user';
+import  user  from '../reducers/user';
 import  Login  from '../Login';
 import  LoginForm  from '../LoginForm';
 import  TaskFormModalPopup   from '../TaskFormModalPopup';
@@ -27,6 +26,9 @@ global.expect = chai.expect;
 global.assert = chai.assert;
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
+/**
+  Test includes checks for correct and incorrect password
+**/
 describe('\n Login-Wrong-Password \n ', () => {
   let wrapperData;
   let wrapperTaskForm
@@ -42,7 +44,6 @@ describe('\n Login-Wrong-Password \n ', () => {
   before(function() {
     // runs before all tests in this block
     wrapperData = mount(<Login login={login} store={store}/>)
-    // wrapperTaskForm =  mount(<TaskForm savetask={savetask}  />)
   });
 
   describe('\n   Login \n', () => {

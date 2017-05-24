@@ -12,6 +12,9 @@ require('isomorphic-fetch');
 
 let userState = {};
 
+/**
+ handles response coming from server
+**/
 function handleResponse(response) {
   if (response.ok) {
     return response.json();
@@ -105,10 +108,10 @@ export function savetask(data) {
     const payload = 'mutation { addTask( title: "' + data.title
                   + '", status: "' + data.status
                   + '", category: "' + data.category
-                  +'", startDate: "' + data.startDate.toISOString() 
-                  +'", dueDate: "' + data.dueDate.toISOString() 
-                  +'", taskContent: "' + data.taskContent 
-                  +'", userId: "' + user._id 
+                  +'", startDate: "' + data.startDate.toISOString()
+                  +'", dueDate: "' + data.dueDate.toISOString()
+                  +'", taskContent: "' + data.taskContent
+                  +'", userId: "' + user._id
                   +'", ) { id, status, category, title, startDate, dueDate, taskContent } }'
 
     return glQuery(payload, user).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(addtask(data.addTask)) );
@@ -174,6 +177,6 @@ function hasGraphQlError(response) {
   if(response.hasOwnProperty('success') && response.success === false){
     window.localStorage.removeItem("user")
     return true
-  } else 
+  } else
     return false
 }

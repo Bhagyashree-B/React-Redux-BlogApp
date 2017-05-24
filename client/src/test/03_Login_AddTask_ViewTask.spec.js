@@ -4,8 +4,7 @@ import { shallow, mount } from 'enzyme';
 import chai from 'chai';
 import TestUtils from 'react-addons-test-utils';
 import configureMockStore  from 'redux-mock-store';
-// import  {savetask}  from '../actions';
- import  user  from '../reducers/user';
+import  user  from '../reducers/user';
 import  Login  from '../Login';
 import  LoginForm  from '../LoginForm';
 import  TaskFormModalPopup   from '../TaskFormModalPopup';
@@ -26,6 +25,10 @@ global.Assertion = chai.Assertion;
 global.expect = chai.expect;
 global.assert = chai.assert;
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
+/**
+  Usecase for on successful login add task and then view tasks
+**/
 
 export const LOGOUT = 'LOGOUT';
 export function logout() {
@@ -49,9 +52,7 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
   const password = "john123"
 
   before(function() {
-    
     wrapperData = mount(<Login login={login} store={store}/>)
-    // wrapperTaskForm =  mount(<TaskForm savetask={savetask}  />)
   });
 
   describe('\n   Login \n', () => {
@@ -64,7 +65,6 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
         expect(wrapperData.find('input').find('.password').prop('value')).to.equal(password);
     });
     it('Login successfull', function(done) {
-      // if(!store.getState().user.isAuthenticated)
        wrapperData.find('.loginbtn').simulate('click')
        setTimeout(function () {
          const state = store.getState();
@@ -84,7 +84,7 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
         stateUser
       }));
       spy.restore();
-      
+
     });
   });
 
@@ -96,7 +96,7 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
     });
     it('Open modal popup', function() {
         wrapperTaskFormModalPopup.find('.modalBtn').simulate('click')
-        
+
     });
     it('Add title - ' + taskTitle, () => {
         wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: taskTitle}});

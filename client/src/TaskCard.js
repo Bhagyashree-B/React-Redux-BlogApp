@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import {Panel } from 'react-bootstrap';
 import  './css/TaskCard.css';
 import moment from 'moment';
@@ -16,6 +15,9 @@ const categoryList = {
   low : "Low",
 }
 
+/**
+  taskCard function takes the task from the parent and Displaying in UI
+**/
 export default function taskCard({ task, deletetask }) {
   let startDate = moment(task.startDate).format("dddd, MMMM Do YYYY")
   let dueDate = moment(task.dueDate).format("dddd, MMMM Do YYYY")

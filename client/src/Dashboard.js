@@ -105,6 +105,9 @@ class Dashboard extends Component {
   }
 
   render () {
+    /**
+      Shows a graph based on the status of task
+    **/
     if(this.props.chartData.dataBycategory) {
       dataBycategory.series[0].data = []
       this.props.chartData.dataBycategory.data.map( val => {
@@ -118,29 +121,33 @@ class Dashboard extends Component {
       })
     }
 
+    /**
+      Shows a graph based on the each user's tasks count
+    **/
     if(this.props.chartData.allData) {
       allData.xAxis.categories = []
       allData.series[0].data = []
       this.props.chartData.allData.map( val => {
-        allData.xAxis.categories.push(val.userName)  
+        allData.xAxis.categories.push(val.userName)
         allData.series[0].data.push(Number(val.count))
       })
     }
 
     return (
       <div className="col-sm-12">
-        <div id="bloggraph" className="col-sm-8">
+       <div id="bloggraph" className="col-sm-8">
           <br></br>
-          { this.props.chartData.dataBycategory && this.props.chartData.dataBycategory.total ? 
+          { this.props.chartData.dataBycategory && this.props.chartData.dataBycategory.total ?
             <ReactHighcharts config = {dataBycategory}></ReactHighcharts> : "No task added yet." }
         </div>
+
         <div id="bloggraph" className="col-sm-4">
           <br></br>
           <p>Total task count : { this.props.chartData.dataBycategory ? this.props.chartData.dataBycategory.total : 0 }</p>
-          <p><Link to="/tasks" className="">View Tasks</Link></p>
+          <p><a href="/tasks" className="">View Tasks</a></p>
         </div>
-        
-        <div id="bloggraph" className="col-sm-8">
+
+       <div id="bloggraph" className="col-sm-8">
           <br></br>
           <br></br>
           <br></br>

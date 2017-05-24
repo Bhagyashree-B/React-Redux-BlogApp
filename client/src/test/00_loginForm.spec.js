@@ -4,24 +4,31 @@ import { expect } from 'chai';
 import  Login  from '../LoginForm';
 import sinon from 'sinon';
 
-describe('\n Login-Page-Validations \n ', function () {
+/**
 
+  Test includes checks for Login form is rend correctly with proper formats
+  e.g email format(@ and .) and password (1 special character, at least 1
+  small character and at least 1 capital character )
+
+**/
+
+describe('\n Login-Page-Validations \n ', function () {
 var passwordData = "@123Password"
 var emailData = "email@sss.cpm"
-var badPasswordData = "1"
-var badEmailData = "1"
+var badPasswordData = "johngmail.com"
+var badEmailData = "john123"
 
  it('Page is rendered correctly', () => {
    const wrapper = shallow(<Login/>);
     expect(wrapper.type()).to.eql('div');
   });
 
- it('Should have an input for  email and password', function () {
+ it('Username field exists', function () {
     const wrapper = shallow(<Login/>);
     expect(wrapper.find('input')).to.have.length(2);
   });
 
-  it('Should have an registration button for login users ', function () {
+  it('Password field exists', function () {
     const wrapper = shallow(<Login/>);
     expect(wrapper.find('button')).to.have.length(1);
   });
@@ -40,7 +47,6 @@ var badEmailData = "1"
     expect(wrapper.state().password).to.equal(badPasswordData);
     expect(wrapper.state().password).to.be.defined;
     var re = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/
-    
     expect(true).to.equal(re.test(wrapper.state().password));
   });
 
@@ -58,7 +64,7 @@ var badEmailData = "1"
     expect(wrapper.state().password).to.equal(passwordData);
     expect(wrapper.state().password).to.be.defined;
     var re = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/
-    
+
     expect(true).to.equal(re.test(wrapper.state().password));
   });
 });

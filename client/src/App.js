@@ -8,9 +8,11 @@ import Login from './Login';
 import Home from './Home';
 import Dashboard from './Dashboard'
 import TasksPage from './TasksPage';
-// import TaskFormPage from './TaskFormPage';
 import TaskFormModalPopup from './TaskFormModalPopup';
 
+/**
+  Depending on Authenticated user it will route to the respective components.
+**/
 function PrivateRoute ({component: Component, isAuthenticated, ...rest}) {
   return (
     <Route

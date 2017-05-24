@@ -4,13 +4,16 @@ import { Redirect } from 'react-router-dom';
 import { authenticate } from './actions';
 import LoginForm from './LoginForm';
 
-
  class Login extends Component {
   state  = {
     redirect: false,
     response:''
   }
 
+  /**
+    login calls the authenticate action with parameters email and password
+    and get the response from the server
+  **/
   login = ({ email, password }) => {
       this.props.authenticate({ email, password }).then(data => {
         if(data.hasOwnProperty('success') && data.success === false)

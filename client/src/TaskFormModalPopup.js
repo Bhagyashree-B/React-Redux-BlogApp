@@ -19,16 +19,13 @@ class TaskFormModalPopup extends React.Component {
     this.setState({ showModal: true });
   }
 
+  /**
+    Calls the savetask action with all data coming from its child component's method
+  **/
   savetask = ({ title, status, category, startDate , dueDate , taskContent }) => {
-    // if (_id) {
-    //   return this.props.updatetask({ _id, title, taskContent }).then(
-    //     () => { this.setState({ redirect: true })},
-    //   );
-    // } else {
       return this.props.savetask({ title, status, category, startDate , dueDate , taskContent }).then(
         () => { this.close() },
       );
-    // }
   }
 
   render() {
@@ -66,7 +63,6 @@ function mapStateToProps(state, props) {
       task: state.tasks.find(item => item.id === match.params.id)
     }
   }
-
   return { task: null };
 }
 

@@ -4,6 +4,10 @@ import TaskFormModalPopup from './TaskFormModalPopup';
 import { connect } from 'react-redux';
 import { fetchtasks, deletetask } from './actions';
 
+/**
+  TaskPage consist Add task modal popup and TasksList which shows all the task.
+  It fetches tasks and pass to its child component.
+**/
 class tasksPage extends React.Component {
   componentDidMount() {
     this.props.fetchtasks()

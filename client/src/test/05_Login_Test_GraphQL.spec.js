@@ -4,8 +4,7 @@ import { shallow, mount } from 'enzyme';
 import chai from 'chai';
 import TestUtils from 'react-addons-test-utils';
 import configureMockStore  from 'redux-mock-store';
-// import  {savetask}  from '../actions';
- import  user  from '../reducers/user';
+import  user  from '../reducers/user';
 import  Login  from '../Login';
 import  LoginForm  from '../LoginForm';
 import  TaskFormModalPopup   from '../TaskFormModalPopup';
@@ -27,6 +26,11 @@ global.expect = chai.expect;
 global.assert = chai.assert;
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
+
+/**
+  Includes API testing for login and get task
+**/
+
 describe('\n Login-Get-Tasks (API) \n ', () => {
   let wrapperData;
   let wrapperTaskForm
@@ -44,7 +48,6 @@ describe('\n Login-Get-Tasks (API) \n ', () => {
     setTimeout(()=>{ done(); },60);
     // runs before all tests in this block
     wrapperData = mount(<Login login={login} store={store}/>)
-    // wrapperTaskForm =  mount(<TaskForm savetask={savetask}  />)
   });
 
   describe('\n   Login \n', () => {
@@ -84,13 +87,13 @@ describe('\n Login-Get-Tasks (API) \n ', () => {
                 if(user && user.token)
                     request.setRequestHeader("x-access-token", user.token);
                 request.send(payload);
-                request.onreadystatechange = () => {               
-                    if (request.readyState === 4) {                  
+                request.onreadystatechange = () => {
+                    if (request.readyState === 4) {
                     resolve(request.responseText)
                     }
                 }
                 }).then(res => {
-                //console.log("Inside then ---------------->" +res)              
+                //console.log("Inside then ---------------->" +res)
                 let rs = JSON.parse(res)
                 expect(rs.hasOwnProperty('data')).to.equal(true)
                 done();
