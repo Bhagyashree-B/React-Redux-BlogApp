@@ -5,6 +5,8 @@ node_modules
 
 # testing
 postContentage
+coverage
+.nyc_output
 
 # production
 build
