@@ -150,14 +150,10 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
   });
 
   after(function(done) {
-    //let unsubscribe = store.subscribe(handleChange)
     store.dispatch(logout())
     wrapperTaskPage.unmount();
     wrapperData.unmount();
     wrapperTaskFormModalPopup.unmount();
-    // function handleChange() {
-    //   unsubscribe()
-      done();
-    // }
+    done();
   });
 });

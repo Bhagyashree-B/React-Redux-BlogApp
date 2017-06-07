@@ -78,7 +78,6 @@ describe('\n Login-Get-Tasks (API) \n ', () => {
     it('Retrieve all tasks', function(done) {
         const state = store.getState();
         let user = state.user
-        // let payload = '{ tasks( userId : "'+ user._id +'") { id, userId, status, title, category, startDate , dueDate , taskContent}}'
         let payload = '{ chartByCategory( userId : "'+ user._id +'", statusValue : "inprogress" ) { dataBycategory { total, data {status, count} } , allData { count, userName} } }'
         new Promise(function(resolve, reject) {
           let request= new XMLHttpRequest();
