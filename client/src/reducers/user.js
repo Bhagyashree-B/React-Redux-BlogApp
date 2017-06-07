@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, LOGGEDIN } from '../actions'
+import { LOGIN, LOGOUT, LOGGEDIN, LOGINFAIL } from '../actions'
 
 
 const user = (state = [], action = {}) => {
@@ -13,6 +13,9 @@ const user = (state = [], action = {}) => {
       case LOGOUT:
         window.localStorage.removeItem("user")
         return {};
+
+      case LOGINFAIL:
+        return action.user;
 
       default:
         let savedState = JSON.parse(window.localStorage.getItem("user")) || {}

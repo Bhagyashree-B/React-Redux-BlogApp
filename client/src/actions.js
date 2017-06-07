@@ -36,6 +36,17 @@ export function loggedIn(user, token) {
    }
 }
 
+export const LOGINFAIL = 'LOGINFAIL';
+export function loginFailed(data) {
+   let user = {};
+   user.authError = data
+   user.isAuthenticated = false
+   return {
+      type: LOGINFAIL,
+      user
+   }
+}
+
 export function authenticate(data) {
   return dispatch => {
     return fetch('http://localhost:8080/api/login', {
@@ -46,9 +57,10 @@ export function authenticate(data) {
       }
     }).then(handleResponse)
     .then(data => {
-      if(data.success === false )
+      if(data.success === false ){
+        dispatch(loginFailed(data))
         return data
-      else
+      } else
         return dispatch(loggedIn(data.user, data.token))
   });
   }
