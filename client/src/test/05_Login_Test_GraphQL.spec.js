@@ -43,9 +43,7 @@ describe('\n Login-Get-Tasks (API) \n ', () => {
   const email = "john@gmail.com"
   const password = "john123"
 
-
-  before(function(done) {
-    setTimeout(()=>{ done(); },60);
+  before(function() {
     // runs before all tests in this block
     wrapperData = mount(<Login login={login} store={store}/>)
   });
@@ -60,45 +58,52 @@ describe('\n Login-Get-Tasks (API) \n ', () => {
         expect(wrapperData.find('input').find('.password').prop('value')).to.equal(password);
     });
     it('Click on login', function(done) {
-        this.timeout(50);
-        wrapperData.find('.loginbtn').simulate('click')
-        expect(true).to.equal(true)
+      wrapperData.find('.loginbtn').simulate('click')
+
+      let unsubscribe = store.subscribe(handleChange)
+      function handleChange() {
+        unsubscribe()
         done();
-    //    setTimeout(function () {
-    //      const state = store.getState();
-    //      expect(state.user.isAuthenticated).to.equal(true)
-    //    }, 3000);
+      }
+    });
+    it('Login successfull', function(done) {
+      const state = store.getState();
+      expect(state.user.isAuthenticated).to.be.true
+      if(state.user.isAuthenticated)
+        done();
     });
   });
 
   describe('\n   Get Tasks (API) \n' , () => {
     it('Retrieve all tasks', function(done) {
-            this.timeout(300);
-            setTimeout(function () {
-            const state = store.getState();
-                expect(state.tasks).to.not.be.undefined;
-                let user = state.user
-                // let payload = '{ tasks( userId : "'+ user._id +'") { id, userId, status, title, category, startDate , dueDate , taskContent}}'
-                let payload = '{ chartByCategory( userId : "'+ user._id +'", statusValue : "inprogress" ) { dataBycategory { total, data {status, count} } , allData { count, userName} } }'
-                new Promise(function(resolve, reject) {
-                let request= new XMLHttpRequest();
-                request.open("POST", "http://localhost:8080/graphql?query="+payload, true);
-                request.setRequestHeader("Content-Type", "application/graphql");
-                if(user && user.token)
-                    request.setRequestHeader("x-access-token", user.token);
-                request.send(payload);
-                request.onreadystatechange = () => {
-                    if (request.readyState === 4) {
-                    resolve(request.responseText)
-                    }
-                }
-                }).then(res => {
-                //console.log("Inside then ---------------->" +res)
-                let rs = JSON.parse(res)
-                expect(rs.hasOwnProperty('data')).to.equal(true)
-                done();
-                })
-        }, 30);
-        });
+        const state = store.getState();
+        let user = state.user
+        // let payload = '{ tasks( userId : "'+ user._id +'") { id, userId, status, title, category, startDate , dueDate , taskContent}}'
+        let payload = '{ chartByCategory( userId : "'+ user._id +'", statusValue : "inprogress" ) { dataBycategory { total, data {status, count} } , allData { count, userName} } }'
+        new Promise(function(resolve, reject) {
+          let request= new XMLHttpRequest();
+          request.open("POST", "http://localhost:8080/graphql?query="+payload, true);
+          request.setRequestHeader("Content-Type", "application/graphql");
+          if(user && user.token)
+              request.setRequestHeader("x-access-token", user.token);
+          request.send(payload);
+          request.onreadystatechange = () => {
+              if (request.readyState === 4) {
+              resolve(request.responseText)
+              }
+          }
+        }).then(res => {
+          let rs = JSON.parse(res)
+          expect(rs.hasOwnProperty('data')).to.equal(true)
+          done();
+        }).catch(err=>{
+          done(err);
+        })
+      });
     })
+
+  after(function(done) {
+    wrapperData.unmount();
+    done();
+  });
 })

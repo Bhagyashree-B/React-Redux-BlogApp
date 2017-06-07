@@ -52,9 +52,7 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
   const email = "john@gmail.com"
   const password = "john123"
 
-
-  before(function(done) {
-    setTimeout(()=>{ done(); },500);
+  before(function() {
     wrapperData = mount(<Login login={login} store={store}/>)
   });
 
@@ -67,28 +65,31 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
         wrapperData.find(LoginForm).find('.password').simulate('change', {target: {value: password}});
         expect(wrapperData.find('input').find('.password').prop('value')).to.equal(password);
     });
-    it('Login successfull', function(done) {
-      this.timeout(100);
+    it('Click on login', function(done) {
       wrapperData.find('.loginbtn').simulate('click')
-       setTimeout(function () {
-         const state = store.getState();
-         expect(state.user.isAuthenticated).to.equal(true)
-         done();
-       }, 30);
+       
+      let unsubscribe = store.subscribe(handleChange)
+      function handleChange() {
+        unsubscribe()
+        done();
+      }
     });
-    it('Add user auth token to local storage', () => {
-      const stateUser = JSON.stringify(store.getState().user);
-      const spy = sinon.spy(global.window.localStorage, "setItem");
-      spy(stateUser);
-      expect(spy.calledWith( {
-        stateUser
-      }));
-      spy.restore();
-      // const stub = sinon.stub(global.window.localStorage, 'getItem');
-      // stub(stateUser);
-      // expect(stub.calledWith(Object.keys(stateUser)));
-      // stub.restore();
+    it('Login successfull', function(done) {       
+      const state = store.getState();
+      expect(state.user.isAuthenticated).to.be.true
+      if(state.user.isAuthenticated)
+        done();
     });
+    
+    // it('Add user auth token to local storage', () => {
+    //   const stateUser = JSON.stringify(store.getState().user);
+    //   const spy = sinon.spy(global.window.localStorage, "setItem");
+    //   spy(stateUser);
+    //   expect(spy.calledWith( {
+    //     stateUser
+    //   }));
+    //   spy.restore();
+    // });
   });
 
   describe('\n   Add task \n' , () => {
@@ -124,35 +125,87 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
         expect(wrapperTaskFormModalPopup.find('select.category').find('option')).to.not.equal(null);
     });
     it('Click to add task and Close modal popup', function(done){
-      userState = store.getState().user;
       wrapperTaskFormModalPopup.find(TaskForm).find('.saveTaskBtn').simulate('click')
       done();
     });
   });
 
-    describe('\n   Delete task \n', () =>  {
-      it('Delete task - Get some cookies', function(done) {
-          const fetchtasks =  sinon.spy();
-          const deletetask = sinon.stub();
-          wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
-          setTimeout(function () {
-            let {tasks} = store.getState()
-            wrapperTaskPage.find('button.deleteTask').last().simulate('click')
-            setTimeout(function () {
-              const tasksLength = store.getState().tasks
-              expect(tasks.length).to.equal(tasksLength.length + 1)
+  // describe('\n   Delete task \n', () =>  {
+  //     it('Getting all tasks', function(done) {
+  //       const fetchtasks =  sinon.spy();
+  //       const deletetask = sinon.stub();
+  //       wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
+        
+  //       let unsubscribe = store.subscribe(handleChange)
+  //       function handleChange() {
+  //         unsubscribe()
+  //         done();
+  //       }
+  //     });
+
+  //     it('Displaying all tasks', function() {
+  //       expect(wrapperTaskPage.find(TasksList).html()).to
+  //           .not.equal("<div><p>There are no tasks yet in your collection.</p></div>");
+  //     });
+
+  //     // it('Displaying all tasks', function(done) {
+  //     //   const fetchtasks =  sinon.spy();
+  //     //   const deletetask = sinon.spy();
+  //     //   wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
+        
+  //     //   let unsubscribe = store.subscribe(handleChange)
+  //     //   function handleChange() {
+  //     //     expect(wrapperTaskPage.find(TasksList).html()).to
+  //     //       .not.equal("<div><p>There are no tasks yet in your collection.</p></div>");
+  //     //     unsubscribe()
+  //     //     done();
+  //     //   }
+  //     // });
+  //     it('Delete task - Get some cookies - ', function(done) {
+  //       let {tasks} = store.getState()
+  //       wrapperTaskPage.find('button.deleteTask').last().simulate('click')
+  //       let unsubscribe = store.subscribe(handleChange)
+  //       function handleChange() {
+  //         const tasksLength = store.getState().tasks
+  //         if(tasks.length !== tasksLength.length){
+  //           expect(tasks.length).to.equal(tasksLength.length + 1)
+  //           unsubscribe()
+  //           done();
+  //         }
+  //       }
+  //     });
+  // });
+
+  describe('\n   Delete task \n', () =>  {
+    it('Delete task - Get some cookies', function(done) {
+        const fetchtasks =  sinon.spy();
+        const deletetask = sinon.spy();
+        wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
+        
+        let unsubscribe = store.subscribe(handleChange)
+        function handleChange() {
+          let {tasks} = store.getState()
+
+          wrapperTaskPage.find('button.deleteTask').last().simulate('click')
+          let unsubscribe_2 = store.subscribe(handleChange_2)
+          function handleChange_2() {
+            const tasksLength = store.getState().tasks
+
+            if(tasks.length !== tasksLength.length){
+              expect(tasks.length).to.equal(tasksLength.length )
               done();
-            }, 100);
-        }, 150);
-      });
+            }
+          }
+        }
     });
-    
-    // after(function(done) {
-    //   store.dispatch(logout())
-    //   // wrapperData.unmount();
-    //   // wrapperTaskFormModalPopup.unmount();
-    //   // wrapperTaskPage.unmount();
-    //   console.log("after all------------------")
-    //   done();
-    // });
+  });
+  
+  after(function() {
+    //store.dispatch(logout())
+    wrapperData.unmount();
+    wrapperTaskFormModalPopup.unmount();
+    wrapperTaskPage.unmount();
+    // console.log("after all------------------")
+    //done();
+  });
 });

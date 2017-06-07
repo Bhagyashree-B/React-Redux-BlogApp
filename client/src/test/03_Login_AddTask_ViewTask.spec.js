@@ -62,29 +62,30 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
         expect(wrapperData.find('input').find('.password').prop('value')).to.equal(password);
     });
     it('Login successfull', function(done) {
-       wrapperData.find('.loginbtn').simulate('click')
-       setTimeout(function () {
-         const state = store.getState();
-         if(state.user)
-          expect(state.user.isAuthenticated).to.equal(true)
-        else
-          expect(true).to.equal(false)
-         done();
-       }, 20);
+        wrapperData.find('.loginbtn').simulate('click')
+        let unsubscribe = store.subscribe(handleChange)
+        function handleChange() {
+          const state = store.getState();
+          if(state.user)
+            expect(state.user.isAuthenticated).to.equal(true)
+          else
+            expect(true).to.equal(false)
+          unsubscribe()
+          done();
+        }
     });
 
-    it('Add user auth token to local storage', () => {
-      const stateUser = JSON.stringify(store.getState().user);
-      const spy = sinon.spy(global.window.localStorage, "setItem");
-      spy(stateUser);
-      expect(spy.calledWith( {
-        stateUser
-      }));
-      spy.restore();
+    // it('Add user auth token to local storage', () => {
+    //   const stateUser = JSON.stringify(store.getState().user);
+    //   const spy = sinon.spy(global.window.localStorage, "setItem");
+    //   spy(stateUser);
+    //   expect(spy.calledWith( {
+    //     stateUser
+    //   }));
+    //   spy.restore();
 
-    });
+    // });
   });
-
 
   describe('\n   Add task \n' , () => {
     it('Open New task window', function(done) {
@@ -126,29 +127,37 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
   });
 
   describe('\n   View task \n', () =>  {
-      it('Displaying all tasks', function(done) {
-        this.timeout(150);
+      it('Getting all tasks', function(done) {
         const fetchtasks =  sinon.spy();
         const deletetask = sinon.spy();
         wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
-        setTimeout(function () {
-          expect(wrapperTaskPage.find(TasksList).html()).to.not.equal("<div><p>There are no tasks yet in your collection.</p></div>");
+        
+        let unsubscribe = store.subscribe(handleChange)
+        function handleChange() {
+          unsubscribe()
           done();
-        }, 30);
+        }
       });
-      it('Displayed task - '+ taskTitle, function(done) {
-        this.timeout(150);
-        setTimeout(function () {
-          let titleExists
-          const texts = wrapperTaskPage.find(TasksList).find(".panel-heading").map(node => titleExists = node.text() === taskTitle ? true : false );
-          expect(titleExists).to.equal(true);
-          done();
-        }, 40);
+      it('Displaying all tasks', function() {
+        expect(wrapperTaskPage.find(TasksList).html()).to
+            .not.equal("<div><p>There are no tasks yet in your collection.</p></div>");
+      });
+      it('Displayed task - '+ taskTitle, function() {
+        let titleExists
+        const texts = wrapperTaskPage.find(TasksList).find(".panel-heading").map(node => titleExists = node.text() === taskTitle ? true : false );
+        expect(titleExists).to.equal(true);
       });
   });
 
   after(function(done) {
+    //let unsubscribe = store.subscribe(handleChange)
     store.dispatch(logout())
-    done();
+    wrapperTaskPage.unmount();
+    wrapperData.unmount();
+    wrapperTaskFormModalPopup.unmount();
+    // function handleChange() {
+    //   unsubscribe()
+      done();
+    // }
   });
 });
