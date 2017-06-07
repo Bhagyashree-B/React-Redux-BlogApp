@@ -1,32 +1,14 @@
 import React from 'react';
-// import {findDOMNode} from 'react-dom';
 import { shallow, mount } from 'enzyme';
 import chai from 'chai';
-// import TestUtils from 'react-addons-test-utils';
-// import configureMockStore  from 'redux-mock-store';
-// import glQuery from '../service/HttpGraphQl'
-// import  {taskDeleted, deletetask}  from '../actions';
-// import  user  from '../reducers/user';
 import  Login  from '../Login';
-// import  App  from '../App';
 import  LoginForm  from '../LoginForm';
 import  TaskFormModalPopup   from '../TaskFormModalPopup';
-// import  Modal   from '../TaskFormModalPopup';
 import  TaskForm  from '../TaskForm';
 import  TaskPage  from '../TasksPage';
 import TasksList from '../TasksList';
 import sinon from 'sinon';
-// import thunk from 'redux-thunk'
-// import moment from 'moment';
 import store from '../store/createStore';
-// const middlewares = [ thunk ]
-// const mockStore = configureMockStore(middlewares)
-// chai.config.includeStack = true;
-// global.chai = chai;
-// global.AssertionError = chai.AssertionError;
-// global.Assertion = chai.Assertion;
-// global.expect = chai.expect;
-// global.assert = chai.assert;
 
 export const LOGOUT = 'LOGOUT';
 export function logout() {
@@ -41,14 +23,10 @@ export function logout() {
 
 describe('\n Login-AddTask-DeleteTask \n ', () => {
   let wrapperData;
-  // let wrapperTaskForm
   let wrapperTaskFormModalPopup;
   let wrapperTaskPage;
-  // let userState;
-  // const loginHandleSubmit = sinon.spy();
   const login = sinon.spy();
   const savetask = sinon.spy();
-  // const logoutUser = sinon.spy();
   const email = "john@gmail.com"
   const password = "john123"
 
@@ -84,16 +62,6 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
       if(state.user.isAuthenticated)
         done();
     });
-    
-    // it('Add user auth token to local storage', () => {
-    //   const stateUser = JSON.stringify(store.getState().user);
-    //   const spy = sinon.spy(global.window.localStorage, "setItem");
-    //   spy(stateUser);
-    //   expect(spy.calledWith( {
-    //     stateUser
-    //   }));
-    //   spy.restore();
-    // });
   });
 
   describe('\n   Add task \n' , () => {

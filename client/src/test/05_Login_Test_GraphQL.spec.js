@@ -1,29 +1,11 @@
 import React from 'react';
-// import {findDOMNode} from 'react-dom';
 import { shallow, mount } from 'enzyme';
 import chai from 'chai';
-// import TestUtils from 'react-addons-test-utils';
-// import configureMockStore  from 'redux-mock-store';
-// import  user  from '../reducers/user';
 import  Login  from '../Login';
 import  LoginForm  from '../LoginForm';
-// import  TaskFormModalPopup   from '../TaskFormModalPopup';
-// import  Modal   from '../TaskFormModalPopup';
-// import  TaskForm  from '../TaskForm';
-// import  TaskPage  from '../TasksPage';
-// import TasksList from '../TasksList';
 import sinon from 'sinon';
-// import thunk from 'redux-thunk'
-// import moment from 'moment';
 import store from '../store/createStore';
-// const middlewares = [ thunk ]
-// const mockStore = configureMockStore(middlewares)
-// chai.config.includeStack = true;
-// global.chai = chai;
-// global.AssertionError = chai.AssertionError;
-// global.Assertion = chai.Assertion;
-// global.expect = chai.expect;
-// global.assert = chai.assert;
+
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 
@@ -33,13 +15,7 @@ const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 describe('\n Login-Get-Tasks (API) \n ', () => {
   let wrapperData;
-  // let wrapperTaskForm
-  // let wrapperTaskFormModalPopup;
-  // let wrapperTaskPage;
-  // const loginHandleSubmit = sinon.spy();
   const login = sinon.spy();
-  // const login1 = sinon.spy();
-  // const savetask = sinon.spy();
   const email = "john@gmail.com"
   const password = "john123"
 

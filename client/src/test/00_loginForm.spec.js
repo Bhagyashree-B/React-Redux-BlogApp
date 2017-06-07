@@ -2,7 +2,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import  Login  from '../LoginForm';
-// import sinon from 'sinon';
 
 /**
 

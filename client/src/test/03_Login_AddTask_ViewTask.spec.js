@@ -1,27 +1,15 @@
 import React from 'react';
-// import {findDOMNode} from 'react-dom';
 import { shallow, mount } from 'enzyme';
 import chai from 'chai';
-// import TestUtils from 'react-addons-test-utils';
-// import  user  from '../reducers/user';
+
 import  Login  from '../Login';
 import  LoginForm  from '../LoginForm';
 import  TaskFormModalPopup   from '../TaskFormModalPopup';
-// import  Modal   from '../TaskFormModalPopup';
 import  TaskForm  from '../TaskForm';
 import  TaskPage  from '../TasksPage';
 import TasksList from '../TasksList';
 import sinon from 'sinon';
-//import moment from 'moment';
 import store from '../store/createStore';
-
-// chai.config.includeStack = true;
-// global.chai = chai;
-// global.AssertionError = chai.AssertionError;
-// global.Assertion = chai.Assertion;
-// global.expect = chai.expect;
-// global.assert = chai.assert;
-// const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 /**
   Usecase for on successful login add task and then view tasks
@@ -37,14 +25,10 @@ export function logout() {
 describe('\n Login-AddTask-ViewTask \n ', () => {
   let taskTitle = "Get milk"
   let wrapperData;
-  // let wrapperTaskForm
   let wrapperTaskFormModalPopup;
   let wrapperTaskPage;
-  // const loginHandleSubmit = sinon.spy();
   const login = sinon.spy();
-  // const login1 = sinon.spy();
   const savetask = sinon.spy();
-  // const logoutUser = sinon.spy();
   const email = "john@gmail.com"
   const password = "john123"
 
@@ -74,17 +58,6 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
           done();
         }
     });
-
-    // it('Add user auth token to local storage', () => {
-    //   const stateUser = JSON.stringify(store.getState().user);
-    //   const spy = sinon.spy(global.window.localStorage, "setItem");
-    //   spy(stateUser);
-    //   expect(spy.calledWith( {
-    //     stateUser
-    //   }));
-    //   spy.restore();
-
-    // });
   });
 
   describe('\n   Add task \n' , () => {
