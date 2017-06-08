@@ -1,10 +1,23 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { expect } from 'chai';
+import chai from 'chai';
+import sinon from 'sinon';
+import { shallow, mount } from 'enzyme';
+
+import store from '../store/createStore';
 import  Login  from '../LoginForm';
 
-/**
+global.React = React;
+global.shallow = shallow;
+global.mount = mount;
+global.store = store;
+global.sinon = sinon;
+global.chai = chai;
+global.AssertionError = chai.AssertionError;
+global.Assertion = chai.Assertion;
+global.expect = chai.expect;
+global.assert = chai.assert;
 
+/**
   Test includes checks for Login form is rend correctly with proper formats
   e.g email format(@ and .) and password (1 special character, at least 1
   small character and at least 1 capital character )

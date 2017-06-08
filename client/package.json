@@ -48,7 +48,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha test/setup.js --compilers js:test/null-compiler.js ./src/test/**/*.spec.js --debug",
-    "test": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/*.spec.js --debug",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha test/setup.js --compilers js:test/null-compiler.js ./src/test/**/*.spec.js --debug",
     "test-login-form": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/a_loginForm.spec.js --debug",
     "test-view-task": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/Login_AddTask_ViewTask.spec.js --debug",
     "test-delete-task": "cross-env NODE_ENV=test mocha -w test/setup.js --compilers js:test/null-compiler.js ./src/test/**/Login_AddTask_DeleteTask.spec.js --debug",

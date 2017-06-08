@@ -1,14 +1,9 @@
-import React from 'react';
-import { shallow, mount } from 'enzyme';
-import chai from 'chai';
 import  Login  from '../Login';
 import  LoginForm  from '../LoginForm';
 import  TaskFormModalPopup   from '../TaskFormModalPopup';
 import  TaskForm  from '../TaskForm';
 import  TaskPage  from '../TasksPage';
 import TasksList from '../TasksList';
-import sinon from 'sinon';
-import store from '../store/createStore';
 
 export const LOGOUT = 'LOGOUT';
 export function logout() {
@@ -134,30 +129,6 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
         }
       });
   });
-
-  // describe('\n   Delete task \n', () =>  {
-  //   it('Delete task - Get some cookies', function(done) {
-  //       const fetchtasks =  sinon.spy();
-  //       const deletetask = sinon.stub();
-  //       wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
-
-  //       let unsubscribe = store.subscribe(handleChange)
-  //       function handleChange() {
-  //         let {tasks} = store.getState()
-  //         unsubscribe();
-  //         wrapperTaskPage.find('button.deleteTask').last().simulate('click')
-  //         let unsubscribe_2 = store.subscribe(handleChange_2)
-  //         function handleChange_2() {
-  //           const tasksLength = store.getState().tasks
-  //           unsubscribe_2()
-  //           if(tasks.length !== tasksLength.length){
-  //             expect(tasks.length).to.equal(tasksLength.length + 1)
-  //             done();
-  //           }
-  //         }
-  //       }
-  //   });
-  // });
   
   after(function(done) {
     store.dispatch(logout())

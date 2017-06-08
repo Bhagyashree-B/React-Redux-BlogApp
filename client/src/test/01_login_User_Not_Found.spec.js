@@ -1,10 +1,5 @@
-import React from 'react';
-import { mount } from 'enzyme';
-import chai from 'chai';
 import  Login  from '../Login';
 import  LoginForm  from '../LoginForm';
-import sinon from 'sinon';
-import store from '../store/createStore';
 
 /**
   Test includes checks for correct and incorrect user name

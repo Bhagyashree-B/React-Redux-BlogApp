@@ -1,8 +1,4 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { expect } from 'chai';
 import  TaskForm  from '../TaskForm';
-import sinon from 'sinon';
 import moment from 'moment';
 
 /**

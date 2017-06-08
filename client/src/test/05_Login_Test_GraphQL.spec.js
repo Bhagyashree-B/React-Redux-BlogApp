@@ -1,13 +1,7 @@
-import React from 'react';
-import { shallow, mount } from 'enzyme';
-import chai from 'chai';
 import  Login  from '../Login';
 import  LoginForm  from '../LoginForm';
-import sinon from 'sinon';
-import store from '../store/createStore';
 
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-
 
 /**
   Includes API testing for login and get task

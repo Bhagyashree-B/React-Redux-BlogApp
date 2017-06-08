@@ -1,15 +1,9 @@
-import React from 'react';
-import { shallow, mount } from 'enzyme';
-import chai from 'chai';
-
 import  Login  from '../Login';
 import  LoginForm  from '../LoginForm';
 import  TaskFormModalPopup   from '../TaskFormModalPopup';
 import  TaskForm  from '../TaskForm';
 import  TaskPage  from '../TasksPage';
 import TasksList from '../TasksList';
-import sinon from 'sinon';
-import store from '../store/createStore';
 
 /**
   Usecase for on successful login add task and then view tasks
