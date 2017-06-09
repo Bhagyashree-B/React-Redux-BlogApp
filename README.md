@@ -3,12 +3,12 @@ This project is bootstraped by [Afour Technologies](https://afourtech.com/)
 
 ## Table of Content
 
-- [Node.js Setup](#Node.js-Setup)
-- [MongoDB Setup](#MongDB-Setup)
-- [Code Setup](#Code-Setup)
-   - [Server Setup](#Server-Setup)
-   - [Client Setup](#Client-Setup)
-   - [Test Execution](#Test-Execution)
+- [Node.js Setup](#node.js-setup)
+- [MongoDB Setup](#mongdb-setup)
+- [Code Setup](#code-setup)
+   - [Server Setup](#server-setup)
+   - [Client Setup](#client-setup)
+   - [Test Execution](#test-execution)
    
 
 ### Node.js Setup
