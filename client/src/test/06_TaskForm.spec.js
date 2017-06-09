@@ -54,9 +54,15 @@ describe('\n TaskForm-Validation \n ', function () {
     expect(wrapper.state().taskContent).to.equal("taskContent");
   });
 
-  it('Add task category', () => {
+  it('Add task status', () => {
     const wrapper = shallow(<TaskForm/>);
-    wrapper.setState({ category : "food_drink" });
-    expect(wrapper.state().category).to.equal("food_drink");
+    wrapper.setState({ status : "to_be_done" });
+    expect(wrapper.state().status).to.equal("to_be_done");
+  });
+
+  it('Add task priority', () => {
+    const wrapper = shallow(<TaskForm/>);
+    wrapper.setState({ category : "high" });
+    expect(wrapper.state().category).to.equal("high");
   });
 });

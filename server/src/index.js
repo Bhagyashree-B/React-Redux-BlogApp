@@ -56,7 +56,7 @@ let schema = new GraphQLSchema({
 })
 
 // Connect MongoDB with Mongoose
-mongoose.connect('mongodb://localhost/crudwithredux')
+mongoose.connect('mongodb://localhost/tms')
 
 // Set up Express and integrate with our GraphQL Schema and configure to use graphiql
 var app = express()

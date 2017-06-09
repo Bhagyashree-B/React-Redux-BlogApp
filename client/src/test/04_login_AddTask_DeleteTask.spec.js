@@ -17,6 +17,7 @@ export function logout() {
 **/
 
 describe('\n Login-AddTask-DeleteTask \n ', () => {
+  let taskTitle = "Get some cookies" + " - " + Math.floor(10000 + Math.random() * 90000)
   let wrapperData;
   let wrapperTaskFormModalPopup;
   let wrapperTaskPage;
@@ -57,6 +58,16 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
       if(state.user.isAuthenticated)
         done();
     });
+
+    it('Add user auth token to local storage', () => {
+      const stateUser = JSON.stringify(store.getState().user);
+      const spy = sinon.spy(global.window.localStorage, "setItem");
+      spy(stateUser);
+      expect(spy.calledWith( {
+        stateUser
+      }));
+      spy.restore();
+    });
   });
 
   describe('\n   Add task \n' , () => {
@@ -67,8 +78,8 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
     it('Open modal popup', function() {
         wrapperTaskFormModalPopup.find('.modalBtn').simulate('click')
     });
-    it('Add title - Get some cookies', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: 'Get some cookies'}});
+    it('Add title - ' + taskTitle, () => {
+        wrapperTaskFormModalPopup.find(TaskForm).find('.title').simulate('change', {target: {value: taskTitle}});
         expect(wrapperTaskFormModalPopup.find('input').find('.title').prop('value')).to.not.equal(null);
     });
     it('Add start date', () => {
@@ -80,14 +91,14 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
         expect(wrapperTaskFormModalPopup.find('input').find('.startDate').prop('value')).to.not.equal(null);
     });
     it('Add task description', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'milk'}});
+        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'with milk'}});
         expect(wrapperTaskFormModalPopup.find('input').find('.taskContent').prop('value')).to.not.equal(null);
     });
     it('Add task status', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.status').simulate('change', {target: {value: 'inprogress'}});
+        wrapperTaskFormModalPopup.find(TaskForm).find('.status').simulate('change', {target: {value: 'to_be_done'}});
         expect(wrapperTaskFormModalPopup.find('select.status').find('option')).to.not.equal(null);
     });
-    it('Add task category', () => {
+    it('Add task priority', () => {
         wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'high'}});
         expect(wrapperTaskFormModalPopup.find('select.category').find('option')).to.not.equal(null);
     });
@@ -102,11 +113,13 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
         const fetchtasks =  sinon.spy();
         const deletetask = sinon.stub();
         wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
-        
         let unsubscribe = store.subscribe(handleChange)
         function handleChange() {
-          unsubscribe()
-          done();
+          let {tasks} = store.getState()
+          if(store.getState().tasks.length > 0){
+            unsubscribe()
+            done();
+          }
         }
       });
 
@@ -115,13 +128,13 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
             .not.equal("<div><p>There are no tasks yet in your collection.</p></div>");
       });
 
-      it('Delete task - Get some cookies - ', function(done) {
+      it('Delete task - ' + taskTitle, function(done) {
         let {tasks} = store.getState()
         wrapperTaskPage.find('button.deleteTask').last().simulate('click')
         let unsubscribe = store.subscribe(handleChange)
         function handleChange() {
           const tasksLength = store.getState().tasks
-          if(tasks.length !== tasksLength.length){
+          if(tasks.length > 1 && tasks.length !== tasksLength.length){
             expect(tasks.length).to.equal(tasksLength.length + 1)
             unsubscribe()
             done();
@@ -133,8 +146,6 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
   after(function(done) {
     store.dispatch(logout())
     wrapperData.unmount();
-    wrapperTaskFormModalPopup.unmount();
-    wrapperTaskPage.unmount();
     done();
   });
 });

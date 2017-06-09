@@ -17,7 +17,7 @@ export function logout() {
 }
 
 describe('\n Login-AddTask-ViewTask \n ', () => {
-  let taskTitle = "Get milk"
+  let taskTitle = "Get milk - " + Math.floor(10000 + Math.random() * 90000)
   let wrapperData;
   let wrapperTaskFormModalPopup;
   let wrapperTaskPage;
@@ -76,15 +76,15 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
         expect(wrapperTaskFormModalPopup.find('input').find('.startDate').prop('value')).to.not.equal(null);
     });
     it('Add task description', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'tt'}});
+        wrapperTaskFormModalPopup.find(TaskForm).find('.taskContent').simulate('change', {target: {value: 'only full cream milk'}});
         expect(wrapperTaskFormModalPopup.find('input').find('.taskContent').prop('value')).to.not.equal(null);
     });
       it('Add task status', () => {
         wrapperTaskFormModalPopup.find(TaskForm).find('.status').simulate('change', {target: {value: 'inprogress'}});
         expect(wrapperTaskFormModalPopup.find('select.status').find('option')).to.not.equal(null);
     });
-    it('Add task category', () => {
-        wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'food_drink'}});
+    it('Add task priority', () => {
+        wrapperTaskFormModalPopup.find(TaskForm).find('.category').simulate('change', {target: {value: 'medium'}});
         expect(wrapperTaskFormModalPopup.find('select.category').find('option')).to.not.equal(null);
     });
     it('Click to add task and Close modal popup', function(done){
@@ -117,7 +117,7 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
   });
 
   after(function(done) {
-    store.dispatch(logout())
+    //store.dispatch(logout())
     wrapperTaskPage.unmount();
     wrapperData.unmount();
     wrapperTaskFormModalPopup.unmount();
