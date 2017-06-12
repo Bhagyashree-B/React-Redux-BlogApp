@@ -29,11 +29,15 @@ describe('\n Login-VerifyGraphdata (API) \n ', () => {
     });
     it('Click on login', function(done) {
       wrapperData.find('.loginbtn').simulate('click')
-       
+      
+      /* Adding a change listener. It will be called any time an action is dispatched, 
+         and some part of the state tree may potentially have changed. */
+      // This returns a function that unsubscribes the change listener.
       let unsubscribe = store.subscribe(handleChange)
       function handleChange() {
         const state = store.getState();
-        if(typeof state.user.isAuthenticated !== "undefined"){  
+        if(typeof state.user.isAuthenticated !== "undefined"){
+          // unsubscribe the change listener
           unsubscribe()
           done();
         }
@@ -51,8 +55,12 @@ describe('\n Login-VerifyGraphdata (API) \n ', () => {
     it('Render Dashboard view', function(done) {
      wrapperChartData = mount(<Dashboard fetchChartData={fetchChartData} store={store}  />)
      
+     /* Adding a change listener. It will be called any time an action is dispatched, 
+        and some part of the state tree may potentially have changed. */
+     // This returns a function that unsubscribes the change listener.
      let unsubscribe = store.subscribe(handleChange)
      function handleChange() {
+        // unsubscribe the change listener
         unsubscribe()
         done();
       }

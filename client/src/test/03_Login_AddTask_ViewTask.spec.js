@@ -41,6 +41,10 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
     });
     it('Login successfull', function(done) {
         wrapperData.find('.loginbtn').simulate('click')
+
+        /* Adding a change listener. It will be called any time an action is dispatched, 
+           and some part of the state tree may potentially have changed. */
+        // This returns a function that unsubscribes the change listener.
         let unsubscribe = store.subscribe(handleChange)
         function handleChange() {
           const state = store.getState();
@@ -48,6 +52,8 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
             expect(state.user.isAuthenticated).to.equal(true)
           else
             expect(true).to.equal(false)
+
+          // unsubscribe the change listener
           unsubscribe()
           done();
         }
@@ -99,8 +105,12 @@ describe('\n Login-AddTask-ViewTask \n ', () => {
         const deletetask = sinon.spy();
         wrapperTaskPage = mount(<TaskPage fetchtasks={fetchtasks} deletetask={deletetask} store={store}  />)
         
+        /* Adding a change listener. It will be called any time an action is dispatched, 
+           and some part of the state tree may potentially have changed. */
+        // This returns a function that unsubscribes the change listener.
         let unsubscribe = store.subscribe(handleChange)
         function handleChange() {
+          // unsubscribe the change listener
           unsubscribe()
           done();
         }
