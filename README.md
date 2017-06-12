@@ -33,6 +33,9 @@ $ db.createCollection("users")
 ```sh
 $ db.users.insertOne({ name : "john", email: "john@gmail.com", password: "john123"})
 ```
+```sh
+$ db.users.insertOne({ name : "scott", email: "scott@gmail.com", password: "scott123"})
+```
 - Start mongodb, run **mongod.exe** which is present in bin folder where mongodb is installed
 
 
