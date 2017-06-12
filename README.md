@@ -1,4 +1,4 @@
-This project is bootstraped by [Afour Technologies](https://afourtech.com/)
+This project is developed by [Afour Technologies](https://afourtech.com/)
 # README 
 
 ## Table of Content
@@ -21,13 +21,9 @@ Download and Install node.js as per your operating system
 - Download and Install MongoDB as per your operating system
 [Download](https://www.mongodb.com/download-center#community)
 - Set appropriate path in environment variables
-- There will be a database with name **crudwithredux**, check using below command on mongodb's console
-```sh
-$ show databases
-```
 - Use the database using below command
 ```sh
-$ use crudwithredux
+$ use tms
 ```
 - There should be one collection named **tasks**. Please create another collection **users** using below command
 ```sh
