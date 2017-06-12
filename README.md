@@ -1,4 +1,4 @@
-This project is bootstraped by [Afour Technologies](https://afourtech.com/)
+This project is developed by [Afour Technologies](https://afourtech.com/)
 # README 
 
 ## Table of Content
@@ -21,21 +21,20 @@ Download and Install node.js as per your operating system
 - Download and Install MongoDB as per your operating system
 [Download](https://www.mongodb.com/download-center#community)
 - Set appropriate path in environment variables
-- There will be a database with name **crudwithredux**, check using below command on mongodb's console
-```sh
-$ show databases
-```
 - Use the database using below command
 ```sh
-$ use crudwithredux
+$ use tms
 ```
-- There should be one collection named **tasks**. Please create another collection **users** using below command
+- There will be one collection named **tasks**, once server is started. Please create another collection **users** using below command
 ```sh
 $ db.createCollection("users")
 ```
 - Insert user details in users collection using below command
 ```sh
 $ db.users.insertOne({ name : "john", email: "john@gmail.com", password: "john123"})
+```
+```sh
+$ db.users.insertOne({ name : "scott", email: "scott@gmail.com", password: "scott123"})
 ```
 - Start mongodb, run **mongod.exe** which is present in bin folder where mongodb is installed
 
