@@ -25,7 +25,7 @@ Download and Install node.js as per your operating system
 ```sh
 $ use tms
 ```
-- There should be one collection named **tasks**. Please create another collection **users** using below command
+- There will be one collection named **tasks**, once server is started. Please create another collection **users** using below command
 ```sh
 $ db.createCollection("users")
 ```
