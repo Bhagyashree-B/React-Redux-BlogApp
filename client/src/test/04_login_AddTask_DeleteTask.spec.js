@@ -146,9 +146,9 @@ describe('\n Login-AddTask-DeleteTask \n ', () => {
         // This returns a function that unsubscribes the change listener.
         let unsubscribe = store.subscribe(handleChange)
         function handleChange() {
-          const tasksLength = store.getState().tasks
-          if(tasks.length > 1 && tasks.length !== tasksLength.length){
-            expect(tasks.length).to.equal(tasksLength.length + 1)
+          const tasksAfterDeletion = store.getState().tasks
+          if(tasks.length > 1 && tasks.length !== tasksAfterDeletion.length){
+            expect(tasks.length).to.equal(tasksAfterDeletion.length + 1)
 
             // unsubscribe the change listener
             unsubscribe()
