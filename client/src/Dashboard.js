@@ -72,7 +72,9 @@ class Dashboard extends Component {
        <div id="bar_chart" className="col-sm-8">
           <br></br>
           <h3 className="text-center">User - Tasks(In progress) Chart</h3>
-          <BarChart data={allData} width={800} height={400} margin={{top: 40, bottom: 50, left: 50, right: 50}}/>
+          { this.props.chartData.allData && this.props.chartData.allData.length ?
+            <BarChart data={allData} width={800} height={400} margin={{top: 40, bottom: 50, left: 50, right: 50}}/>
+            : "No user has added any task yet." }
           <br></br>
         </div>
       </div>

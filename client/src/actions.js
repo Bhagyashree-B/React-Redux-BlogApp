@@ -146,7 +146,8 @@ export function updatetask(data) {
 export function deletetask(id) {
   let payload = 'mutation { deleteTask( id: "'+ id +'" ) { id } }'
   return (dispatch, getState) => {
-    glQuery(payload, userState).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(taskDeleted(data.deleteTask.id)) );
+    const { user } = getState();
+    glQuery(payload, user.token ? user : userState).then(data => hasGraphQlError(data) ? dispatch(logout()) : dispatch(taskDeleted(data.deleteTask.id)) );
   }
 }
 
